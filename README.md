@@ -6,7 +6,7 @@
   - Retrieve latest home timeline from Twitter account @bsman
 
 
-## How To Use (for Mac):
+### How To Use (for Mac):
   - create a directory in Finder or in Terminal where the program will be located
   - open Terminal
   - in Terminal, enter the following:
