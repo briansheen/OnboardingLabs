@@ -12,24 +12,20 @@
   - in Terminal, enter the following:
     ```
     cd {location of directory you created above}
-    ```
-    ```
+
     git clone https://github.com/briansheen/OnboardingLabs.git
-    ```
-    ```
+
     cd OnboardingLabs/src
     ```
 ## To Tweet
     ```
     javac -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/Tweet.java
-    ```
-    ```
+
     java -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/Tweet '{your tweet}'
     ```
 ## To Get Timeline
     ```
     javac -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/GetTimeline.java
-    ```
-    ```
+
     java -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/GetTimeline
     ```
