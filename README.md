@@ -13,9 +13,11 @@
     ```
     cd {location of directory you created above}
 
-    git clone -b Lab2_Mavenize https://github.com/briansheen/OnboardingLabs.git
+    git clone https://github.com/briansheen/OnboardingLabs.git
 
     cd OnboardingLabs/
+
+    git checkout Lab2_Mavenize
     ```
 
 ### Run Using Maven
@@ -25,8 +27,8 @@
 
 #### GetTimeline
 
-    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar main.java.com.company.GetTimeline
+    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.GetTimeline
 
 #### Tweet
 
-    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar main.java.com.company.Tweet '{your tweet}'
+    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.Tweet '{your tweet}'
