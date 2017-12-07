@@ -13,7 +13,7 @@
     ```
     cd {location of directory you created above}
 
-    git clone https://github.com/briansheen/OnboardingLabs.git
+    git clone -b Lab2_Mavenize https://github.com/briansheen/OnboardingLabs.git
 
     cd OnboardingLabs/
     ```
