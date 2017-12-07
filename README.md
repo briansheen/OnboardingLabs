@@ -19,15 +19,14 @@
     ```
 
 ### Run Using Maven
-    ```
+
     mvn install
     cd target/
-    ```
+
 #### GetTimeline
-    ```
+
     java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar main.java.com.company.GetTimeline
-    ```
+
 #### Tweet
-    ```
+
     java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar main.java.com.company.Tweet '{your tweet}'
-    ```
