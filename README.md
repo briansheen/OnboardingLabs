@@ -15,7 +15,7 @@
 
     git clone https://github.com/briansheen/OnboardingLabs.git
 
-    cd OnboardingLabs/src
+    cd OnboardingLabs/
     ```
 
 ### Run Using Maven
