@@ -15,17 +15,20 @@
 
     git clone https://github.com/briansheen/OnboardingLabs.git
 
-    cd OnboardingLabs/src
+    cd OnboardingLabs/
+
+    git checkout Lab2_Mavenize
     ```
-### To Tweet:
 
-    javac -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/Tweet.java
+### Run Using Maven
 
-    java -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/Tweet '{your tweet}'
+    mvn install
+    cd target/
 
-### To Get Timeline:
+#### GetTimeline
 
-    javac -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/GetTimeline.java
+    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.GetTimeline
 
-    java -cp {enter the directory path to OnboardingLabs folder}/lib/twitter4j-core-4.0.3.jar:. com/company/GetTimeline
-    
+#### Tweet
+
+    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.Tweet '{your tweet}'

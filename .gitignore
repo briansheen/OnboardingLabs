@@ -48,3 +48,8 @@ fabric.properties
 
 # Log files
 *.log
+
+# idea files
+*.idea
+
+OnboardingLabs.iml
