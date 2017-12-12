@@ -3,9 +3,11 @@ package com.company;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class GetTimeline {
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void main(String[] args) {
+public class GetTimeline {
+    public static ResponseList<Status> run() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("jA80AzMmxvpcZCwbuqsWEirMs")
@@ -15,13 +17,9 @@ public class GetTimeline {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
-            ResponseList<Status> homeTimeLine = twitter.getHomeTimeline();
-            for(Status s : homeTimeLine){
-                System.out.println("@"+s.getUser().getScreenName());
-                System.out.println(s.getText());
-            }
+            return twitter.getHomeTimeline();
         } catch(TwitterException e){
-            System.out.println("error getting twitter timeline");
+            return null;
         }
     }
 }

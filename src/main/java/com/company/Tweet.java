@@ -7,7 +7,7 @@ import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class Tweet {
-    public static void main(String[] args) {
+    public static String run(String args) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("jA80AzMmxvpcZCwbuqsWEirMs")
@@ -17,15 +17,15 @@ public class Tweet {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
-            if(args[0].length()>280){
+            if(args == null || args.length()==0 || args.length()>280){
                 throw new IndexOutOfBoundsException();
             }
-            Status status = twitter.updateStatus(args[0]);
-            System.out.println(status.getText());
+            Status status = twitter.updateStatus(args);
+            return(status.getText());
         } catch (IndexOutOfBoundsException e){
-            System.out.println("tweet can only be 1 - 255 characters!");
+            return("error: tweet can only be 1 - 255 characters!");
         } catch (TwitterException e){
-            System.out.println("error creating a tweet!");
+            return("error creating a tweet!");
         }
     }
 }
