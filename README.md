@@ -23,11 +23,13 @@
 ### Run Using Maven
 
     mvn package
-    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server post-tweet.yml
+    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server
 
 #### GetTimeline
 
   - enter http://localhost:8080/api/1.0/twitter/timeline into your URL bar in a web browser
+    or
+    curl localhost:8080/api/1.0/twitter/timeline
 
 #### Tweet
 

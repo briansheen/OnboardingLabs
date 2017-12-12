@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class TweetResources {
     private final AtomicLong counter;
 
-    public TweetResources(String tweetResult) {
+    public TweetResources() {
         this.counter = new AtomicLong();
     }
 
