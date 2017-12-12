@@ -5,22 +5,13 @@ import org.hibernate.validator.constraints.Length;
 
 public class TweetResponse {
 
-    private long id;
-
-    @Length(max=3)
     private String content;
 
     public TweetResponse() {
     }
 
-    public TweetResponse(long id, String content) {
-        this.id = id;
+    public TweetResponse(String content) {
         this.content = content;
-    }
-
-    @JsonProperty
-    public long getId() {
-        return id;
     }
 
     @JsonProperty

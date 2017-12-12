@@ -28,7 +28,9 @@
 #### GetTimeline
 
   - enter http://localhost:8080/api/1.0/twitter/timeline into your URL bar in a web browser
-    or
+
+or
+
     curl localhost:8080/api/1.0/twitter/timeline
 
 #### Tweet

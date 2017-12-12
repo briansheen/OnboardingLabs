@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TimelineResponse {
 
-    private long id;
-
     private String screenName;
 
     private String content;
@@ -13,15 +11,9 @@ public class TimelineResponse {
     public TimelineResponse() {
     }
 
-    public TimelineResponse(long id, String screenName, String content) {
-        this.id = id;
+    public TimelineResponse(String screenName, String content) {
         this.screenName = screenName;
         this.content = content;
-    }
-
-    @JsonProperty
-    public long getId() {
-        return id;
     }
 
     @JsonProperty

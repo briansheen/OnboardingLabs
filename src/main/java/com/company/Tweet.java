@@ -1,13 +1,16 @@
 package com.company;
 
+import com.company.api.TweetResponse;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+import javax.ws.rs.core.Response;
+
 public class Tweet {
-    public static String run(String args) {
+    public Response run(String args) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("jA80AzMmxvpcZCwbuqsWEirMs")
@@ -21,11 +24,11 @@ public class Tweet {
                 throw new IndexOutOfBoundsException();
             }
             Status status = twitter.updateStatus(args);
-            return(status.getText());
+            return Response.ok(new TweetResponse(status.getText())).build();
         } catch (IndexOutOfBoundsException e){
-            return("error: tweet can only be 1 - 255 characters!");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new TweetResponse("Tweet must be 1-280 characters!")).build();
         } catch (TwitterException e){
-            return("error creating a tweet!");
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 }

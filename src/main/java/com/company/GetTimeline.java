@@ -1,13 +1,15 @@
 package com.company;
 
+import com.company.api.TimelineResponse;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GetTimeline {
-    public static ResponseList<Status> run() {
+    public Response run() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey("jA80AzMmxvpcZCwbuqsWEirMs")
@@ -17,9 +19,14 @@ public class GetTimeline {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
-            return twitter.getHomeTimeline();
+            ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
+            List<TimelineResponse> timelineResponses = new ArrayList<>();
+            for(Status s : homeTimeline){
+                timelineResponses.add(new TimelineResponse(s.getUser().getScreenName(),s.getText()));
+            }
+            return Response.ok(timelineResponses).build();
         } catch(TwitterException e){
-            return null;
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 }
