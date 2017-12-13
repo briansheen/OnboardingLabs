@@ -20,13 +20,11 @@ public class Tweet {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
-            if(args == null || args.length()==0 || args.length()>280){
-                throw new IndexOutOfBoundsException();
+            if(args == null || args.length()==0 || args.trim().isEmpty() || args.length()>280){
+                return Response.status(Response.Status.NOT_ACCEPTABLE).build();
             }
             Status status = twitter.updateStatus(args);
             return Response.ok(new TweetResponse(status.getText())).build();
-        } catch (IndexOutOfBoundsException e){
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new TweetResponse("Tweet must be 1-280 characters!")).build();
         } catch (TwitterException e){
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
