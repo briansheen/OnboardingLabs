@@ -1,7 +1,6 @@
 package com.company.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Length;
 
 public class TweetResponse {
 
@@ -18,4 +17,5 @@ public class TweetResponse {
     public String getContent(){
         return content;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.company;
 
 import com.company.api.TimelineResponse;
+import com.company.api.TwitterErrorResponse;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
@@ -26,7 +27,7 @@ public class GetTimeline {
             }
             return Response.ok(timelineResponses).build();
         } catch(TwitterException e){
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(404,e.getMessage())).build();
         }
     }
 }

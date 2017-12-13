@@ -1,6 +1,8 @@
 package com.company;
 
+import com.company.api.TwitterErrorResponse;
 import com.company.api.TweetResponse;
+import org.apache.commons.lang3.StringUtils;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -19,14 +21,14 @@ public class Tweet {
                 .setOAuthAccessTokenSecret("JgGlTVvDmaWRSVYpt4YgzpejmfVmjyWvNnwM8flCP183j");
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
-        try{
-            if(args == null || args.length()==0 || args.trim().isEmpty() || args.length()>280){
-                return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        try {
+            if (StringUtils.isAllBlank(args) || args.length() > 280) {
+                return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(404, "Tweet message cannot be blank spaces or longer than 280 characters")).build();
             }
             Status status = twitter.updateStatus(args);
             return Response.ok(new TweetResponse(status.getText())).build();
-        } catch (TwitterException e){
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (TwitterException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(404, e.getMessage())).build();
         }
     }
 }
