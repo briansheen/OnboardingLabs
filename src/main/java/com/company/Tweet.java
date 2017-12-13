@@ -21,9 +21,6 @@ public class Tweet {
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try {
-            if (StringUtils.isAllBlank(message) || message.length() > 280) {
-                return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(404, "Tweet message cannot be blank spaces or longer than 280 characters")).build();
-            }
             Status status = twitter.updateStatus(message);
             return Response.ok(new TweetResponse(status.getText())).build();
         } catch (TwitterException e) {
