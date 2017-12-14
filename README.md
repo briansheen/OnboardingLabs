@@ -17,18 +17,22 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab2_Mavenize
+    git checkout Lab3_RESTful
     ```
 
 ### Run Using Maven
 
-    mvn install
-    cd target/
+    mvn package
+    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server
 
 #### GetTimeline
 
-    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.GetTimeline
+  - enter http://localhost:8080/api/1.0/twitter/timeline into your URL bar in a web browser
+
+or
+
+    curl localhost:8080/api/1.0/twitter/timeline
 
 #### Tweet
 
-    java -cp OnboardingLabs-1.0-SNAPSHOT-jar-with-dependencies.jar com.company.Tweet '{your tweet}'
+    curl -X POST -d 'message={your tweet message}' localhost:8080/api/1.0/twitter/tweet
