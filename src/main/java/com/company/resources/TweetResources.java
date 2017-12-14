@@ -3,6 +3,7 @@ package com.company.resources;
 import com.company.GetTimeline;
 import com.company.Tweet;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,7 +17,7 @@ public class TweetResources {
 
     @POST
     @Path("/tweet")
-    public Response addTweet(@FormParam("message") String message) {
+    public Response addTweet(@FormParam("message") @NotNull String message) {
         Tweet tweet = new Tweet();
         return tweet.run(message);
     }

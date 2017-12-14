@@ -2,7 +2,6 @@ package com.company;
 
 import com.company.api.TwitterErrorResponse;
 import com.company.api.TweetResponse;
-import org.apache.commons.lang3.StringUtils;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
