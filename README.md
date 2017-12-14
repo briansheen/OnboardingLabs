@@ -17,13 +17,21 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab3_RESTful
+    git checkout Lab4_ConfigFiles
     ```
+
+### Modify YML File
+    open twitter-app-example.yml
+
+  - fill in the oAuthConsumerKey, oAuthConsumerSecret, oAuthAccessToken, oAuthAccessTokenSecret with your own Twitter app credentials
+
 
 ### Run Using Maven
 
     mvn package
-    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server
+    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server twitter-app-example.yml
+
+
 
 #### GetTimeline
 
