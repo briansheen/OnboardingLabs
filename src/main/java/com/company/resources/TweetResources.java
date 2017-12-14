@@ -20,7 +20,7 @@ public class TweetResources {
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {
         if(StringUtils.isAllBlank(message) || message.length()>280){
-            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new TwitterErrorResponse(Response.Status.NOT_ACCEPTABLE.getStatusCode(),"Message parameter cannot be null, empty white spaces, or longer than 280 characters.")).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(),"Message parameter cannot be null, empty white spaces, or longer than 280 characters.")).build();
         }
         Tweet tweet = new Tweet();
         return tweet.run(message);
