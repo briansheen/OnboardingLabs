@@ -2,8 +2,9 @@ package com.company.resources;
 
 import com.company.GetTimeline;
 import com.company.Tweet;
+import com.company.api.TwitterErrorResponse;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -17,7 +18,10 @@ public class TweetResources {
 
     @POST
     @Path("/tweet")
-    public Response addTweet(@FormParam("message") @NotNull String message) {
+    public Response addTweet(@FormParam("message") String message) {
+        if(StringUtils.isAllBlank(message) || message.length()>280){
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(new TwitterErrorResponse(Response.Status.NOT_ACCEPTABLE.getStatusCode(),"Message parameter cannot be null, empty white spaces, or longer than 280 characters.")).build();
+        }
         Tweet tweet = new Tweet();
         return tweet.run(message);
     }

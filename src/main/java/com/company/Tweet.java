@@ -23,7 +23,7 @@ public class Tweet {
             Status status = twitter.updateStatus(message);
             return Response.ok(new TweetResponse(status.getText())).build();
         } catch (TwitterException e) {
-            return Response.status(e.getStatusCode()).entity(new TwitterErrorResponse(e.getStatusCode(), e.getMessage())).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to post your tweet.")).build();
         }
     }
 }
