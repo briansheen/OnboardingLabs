@@ -7,6 +7,7 @@ import io.dropwizard.Application;
 import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.apache.commons.lang3.StringUtils;
 
 public class TweetApplication extends Application<TwitterAppConfiguration> {
     public static void main(String[] args) throws Exception {
@@ -21,10 +22,11 @@ public class TweetApplication extends Application<TwitterAppConfiguration> {
 
     @Override
     public void run(TwitterAppConfiguration configuration, Environment environment) {
-        final TweetResources resource = new TweetResources(configuration.getoAuthConsumerKey(),
-                configuration.getoAuthConsumerSecret(),
-                configuration.getoAuthAccessToken(),
-                configuration.getoAuthAccessTokenSecret());
+        TwitterAppConfigurationKeys keys = configuration.getTwitterKeys();
+        if(StringUtils.isAnyBlank(keys.getoAuthAccessToken(),keys.getoAuthAccessTokenSecret(),keys.getoAuthConsumerKey(),keys.getoAuthConsumerSecret())){
+            throw new RuntimeException("Twitter App Configuration Keys Are Required.");
+        }
+        final TweetResources resource = new TweetResources(configuration);
         environment.jersey().register(resource);
     }
 }

@@ -10,13 +10,13 @@ import twitter4j.conf.ConfigurationBuilder;
 import javax.ws.rs.core.Response;
 
 public class Tweet {
-    public Response run(String message, String oAuthConsumerKey, String oAuthConsumerSecret, String oAuthAccessToken, String oAuthAccessTokenSecret) {
+    public Response run(String message, TwitterAppConfigurationKeys keys) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(oAuthConsumerKey)
-                .setOAuthConsumerSecret(oAuthConsumerSecret)
-                .setOAuthAccessToken(oAuthAccessToken)
-                .setOAuthAccessTokenSecret(oAuthAccessTokenSecret);
+                .setOAuthConsumerKey(keys.getoAuthConsumerKey())
+                .setOAuthConsumerSecret(keys.getoAuthConsumerSecret())
+                .setOAuthAccessToken(keys.getoAuthAccessToken())
+                .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try {

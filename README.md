@@ -21,15 +21,16 @@
     ```
 
 ### Modify YML File
-    open twitter-app-example.yml
+    open twitter-app-dev.yml
 
   - fill in the oAuthConsumerKey, oAuthConsumerSecret, oAuthAccessToken, oAuthAccessTokenSecret with your own Twitter app credentials
+  - see twitter-app-example.yml for example
 
 
 ### Run Using Maven
 
     mvn package
-    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server twitter-app-example.yml
+    java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server twitter-app-dev.yml
 
 
 

@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetTimeline {
-    public Response run(String oAuthConsumerKey, String oAuthConsumerSecret, String oAuthAccessToken, String oAuthAccessTokenSecret) {
+    public Response run(TwitterAppConfigurationKeys keys) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(oAuthConsumerKey)
-                .setOAuthConsumerSecret(oAuthConsumerSecret)
-                .setOAuthAccessToken(oAuthAccessToken)
-                .setOAuthAccessTokenSecret(oAuthAccessTokenSecret);
+                .setOAuthConsumerKey(keys.getoAuthConsumerKey())
+                .setOAuthConsumerSecret(keys.getoAuthConsumerSecret())
+                .setOAuthAccessToken(keys.getoAuthAccessToken())
+                .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
