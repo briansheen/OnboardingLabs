@@ -1,6 +1,7 @@
 package com.company;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.validation.ValidationMethod;
+import org.apache.commons.lang3.StringUtils;
 
 public class TwitterAppConfigurationKeys {
 
@@ -9,44 +10,40 @@ public class TwitterAppConfigurationKeys {
     private String oAuthAccessToken;
     private String oAuthAccessTokenSecret;
 
-    @JsonProperty
     public String getoAuthConsumerKey() {
         return oAuthConsumerKey;
     }
 
-    @JsonProperty
     public void setoAuthConsumerKey(String oAuthConsumerKey) {
         this.oAuthConsumerKey = oAuthConsumerKey;
     }
 
-    @JsonProperty
     public String getoAuthConsumerSecret() {
         return oAuthConsumerSecret;
     }
 
-    @JsonProperty
     public void setoAuthConsumerSecret(String oAuthConsumerSecret) {
         this.oAuthConsumerSecret = oAuthConsumerSecret;
     }
 
-    @JsonProperty
     public String getoAuthAccessToken() {
         return oAuthAccessToken;
     }
 
-    @JsonProperty
     public void setoAuthAccessToken(String oAuthAccessToken) {
         this.oAuthAccessToken = oAuthAccessToken;
     }
 
-    @JsonProperty
     public String getoAuthAccessTokenSecret() {
         return oAuthAccessTokenSecret;
     }
 
-    @JsonProperty
     public void setoAuthAccessTokenSecret(String oAuthAccessTokenSecret) {
         this.oAuthAccessTokenSecret = oAuthAccessTokenSecret;
     }
 
+    @ValidationMethod(message="Twitter App Keys cannot be null or empty")
+    public boolean isNotNullOrEmpty(){
+        return !StringUtils.isAnyBlank(oAuthAccessToken,oAuthAccessTokenSecret,oAuthConsumerKey,oAuthConsumerSecret);
+    }
 }

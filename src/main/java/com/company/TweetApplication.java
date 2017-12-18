@@ -22,10 +22,6 @@ public class TweetApplication extends Application<TwitterAppConfiguration> {
 
     @Override
     public void run(TwitterAppConfiguration configuration, Environment environment) {
-        TwitterAppConfigurationKeys keys = configuration.getTwitterKeys();
-        if(StringUtils.isAnyBlank(keys.getoAuthAccessToken(),keys.getoAuthAccessTokenSecret(),keys.getoAuthConsumerKey(),keys.getoAuthConsumerSecret())){
-            throw new RuntimeException("Twitter App Configuration Keys Are Required.");
-        }
         final TweetResources resource = new TweetResources(configuration);
         environment.jersey().register(resource);
     }

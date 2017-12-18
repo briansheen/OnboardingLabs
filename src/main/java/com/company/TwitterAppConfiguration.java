@@ -3,8 +3,11 @@ package com.company;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 
+import javax.validation.Valid;
+
 public class TwitterAppConfiguration extends Configuration {
 
+    @Valid
     private TwitterAppConfigurationKeys twitterKeys;
 
     @JsonProperty
