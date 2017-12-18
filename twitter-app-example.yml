@@ -1,0 +1,5 @@
+twitterKeys:
+  oAuthConsumerKey: your OAuthConsumerKey goes here
+  oAuthConsumerSecret: your OAuthConsumerSecret goes here
+  oAuthAccessToken: your OAuthAccessToken goes here
+  oAuthAccessTokenSecret: your OAuthAccessTokenSecret goes here

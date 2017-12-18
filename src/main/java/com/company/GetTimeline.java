@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetTimeline {
-    public Response run() {
+    public Response run(TwitterAppConfigurationKeys keys) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
-                .setOAuthConsumerKey("jA80AzMmxvpcZCwbuqsWEirMs")
-                .setOAuthConsumerSecret("dqRNGieSAqYi84jFWHRD9Budacl7iAB3wHc8rklCkwIaR1dOaz")
-                .setOAuthAccessToken("22681954-VXEVuclUJ1ztDeSRBgkTdystVjtzaZOSLbw0a4G1r")
-                .setOAuthAccessTokenSecret("JgGlTVvDmaWRSVYpt4YgzpejmfVmjyWvNnwM8flCP183j");
+                .setOAuthConsumerKey(keys.getoAuthConsumerKey())
+                .setOAuthConsumerSecret(keys.getoAuthConsumerSecret())
+                .setOAuthAccessToken(keys.getoAuthAccessToken())
+                .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         Twitter twitter = tf.getInstance();
         try{
