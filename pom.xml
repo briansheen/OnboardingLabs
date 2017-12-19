@@ -12,6 +12,7 @@
         <twitter4j-core-version>4.0.3</twitter4j-core-version>
         <dropwizard-core-version>1.2.2</dropwizard-core-version>
         <maven-shade-plugin-version>2.2</maven-shade-plugin-version>
+        <slf4j-api-version>1.7.25</slf4j-api-version>
     </properties>
 
     <dependencies>
@@ -30,7 +31,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>${slf4j-api-version}</version>
         </dependency>
     </dependencies>
 
