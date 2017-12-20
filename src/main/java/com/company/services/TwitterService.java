@@ -16,21 +16,21 @@ import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TwitterServices {
+public class TwitterService {
 
-    private TwitterServices() {
+    private TwitterService() {
     }
 
-    private static TwitterServices instance = null;
+    private static TwitterService instance = null;
 
-    public static TwitterServices getInstance() {
+    public static TwitterService getInstance() {
         if (instance == null) {
-            instance = new TwitterServices();
+            instance = new TwitterService();
         }
         return instance;
     }
 
-    private static Logger logger = LoggerFactory.getLogger(TwitterServices.class);
+    private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
 
     public Response postTweet(String message, TwitterAppConfigurationKeys keys) {
         if (StringUtils.isAllBlank(message) || message.length() > 280) {
