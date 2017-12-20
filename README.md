@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab4_ConfigFiles
+    git checkout Lab6_ServicesAndResources
     ```
 
 ### Create your YML File
