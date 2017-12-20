@@ -9,7 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import twitter4j.*;
+import twitter4j.ResponseList;
+import twitter4j.TwitterFactory;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
 import twitter4j.conf.ConfigurationBuilder;
 
 import javax.ws.rs.core.Response;
@@ -17,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TwitterService {
+    private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
+    private static TwitterService instance = null;
 
     private TwitterService() {
     }
-
-    private static TwitterService instance = null;
 
     public static TwitterService getInstance() {
         if (instance == null) {
@@ -29,8 +33,6 @@ public class TwitterService {
         }
         return instance;
     }
-
-    private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
 
     public Response postTweet(String message, TwitterAppConfigurationKeys keys) {
         if (StringUtils.isAllBlank(message) || message.length() > 280) {

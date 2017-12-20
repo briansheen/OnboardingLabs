@@ -1,17 +1,13 @@
 package com.company;
 
-import com.company.resources.TweetResources;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.company.resources.TwitterResource;
 import io.dropwizard.Application;
-import io.dropwizard.Configuration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.apache.commons.lang3.StringUtils;
 
-public class TweetApplication extends Application<TwitterAppConfiguration> {
+public class TwitterApplication extends Application<TwitterAppConfiguration> {
     public static void main(String[] args) throws Exception {
-        new TweetApplication().run(args);
+        new TwitterApplication().run(args);
     }
 
     @Override
@@ -22,7 +18,7 @@ public class TweetApplication extends Application<TwitterAppConfiguration> {
 
     @Override
     public void run(TwitterAppConfiguration configuration, Environment environment) {
-        final TweetResources resource = new TweetResources(configuration);
+        final TwitterResource resource = new TwitterResource(configuration);
         environment.jersey().register(resource);
     }
 }

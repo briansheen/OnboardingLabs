@@ -14,11 +14,11 @@ import javax.ws.rs.core.Response;
 
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
-public class TweetResources {
+public class TwitterResource {
     private final TwitterAppConfiguration configuration;
     private TwitterService twitterService = TwitterService.getInstance();
 
-    public TweetResources(TwitterAppConfiguration configuration) {
+    public TwitterResource(TwitterAppConfiguration configuration) {
         this.configuration = configuration;
     }
 
