@@ -55,14 +55,8 @@ public class TwitterService {
             ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
             List<TwitterPost> timelineResponses = new ArrayList<>();
             for (Status s : homeTimeline) {
-                User user = new User();
-                user.setName(s.getUser().getName());
-                user.setProfileImageUrl(s.getUser().getProfileImageURL());
-                user.setTwitterHandle(s.getUser().getScreenName());
-                TwitterPost twitterPost = new TwitterPost();
-                twitterPost.setUser(user);
-                twitterPost.setMessage(s.getText());
-                twitterPost.setCreatedAt(s.getCreatedAt());
+                User user = buildUser(s.getUser());
+                TwitterPost twitterPost = buildTwitterPost(user, s);
                 timelineResponses.add(twitterPost);
             }
             return Response.ok(timelineResponses).build();
@@ -81,5 +75,21 @@ public class TwitterService {
                 .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         return tf.getInstance();
+    }
+
+    private User buildUser(twitter4j.User user){
+        User twitterUser = new User();
+        twitterUser.setTwitterHandle(user.getScreenName());
+        twitterUser.setProfileImageUrl(user.getProfileImageURL());
+        twitterUser.setName(user.getName());
+        return twitterUser;
+    }
+
+    private TwitterPost buildTwitterPost(User user, Status status){
+        TwitterPost twitterPost = new TwitterPost();
+        twitterPost.setCreatedAt(status.getCreatedAt());
+        twitterPost.setMessage(status.getText());
+        twitterPost.setUser(user);
+        return twitterPost;
     }
 }
