@@ -2,9 +2,9 @@ package com.company.models;
 
 public class User {
 
-    private final String twitterHandle;
-    private final String name;
-    private final String profileImageUrl;
+    private String twitterHandle;
+    private String name;
+    private String profileImageUrl;
 
     public User(String twitterHandle, String name, String profileImageUrl) {
         this.twitterHandle = twitterHandle;
@@ -16,11 +16,23 @@ public class User {
         return twitterHandle;
     }
 
+    public void setTwitterHandle(String twitterHandle) {
+        this.twitterHandle = twitterHandle;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getProfileImageUrl() {
         return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
