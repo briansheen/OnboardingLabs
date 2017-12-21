@@ -2,9 +2,10 @@ package com.company.services;
 
 
 import com.company.TwitterAppConfigurationKeys;
-import com.company.api.TimelineResponse;
 import com.company.api.TweetResponse;
 import com.company.api.TwitterErrorResponse;
+import com.company.models.TwitterPost;
+import com.company.models.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +53,17 @@ public class TwitterService {
         Twitter twitter = buildTwitter(keys);
         try {
             ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
-            List<TimelineResponse> timelineResponses = new ArrayList<>();
+            List<TwitterPost> timelineResponses = new ArrayList<>();
             for (Status s : homeTimeline) {
-                timelineResponses.add(new TimelineResponse(s.getUser().getScreenName(), s.getText()));
+                User user = new User();
+                user.setName(s.getUser().getName());
+                user.setProfileImageUrl(s.getUser().getProfileImageURL());
+                user.setTwitterHandle(s.getUser().getScreenName());
+                TwitterPost twitterPost = new TwitterPost();
+                twitterPost.setUser(user);
+                twitterPost.setMessage(s.getText());
+                twitterPost.setCreatedAt(s.getCreatedAt());
+                timelineResponses.add(twitterPost);
             }
             return Response.ok(timelineResponses).build();
         } catch (TwitterException e) {
