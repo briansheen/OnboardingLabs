@@ -2,8 +2,8 @@
 
 # Objective:  
 
-  - To post a tweet using Twitter account @bsman
-  - Retrieve latest home timeline from Twitter account @bsman
+  - To post a tweet using Twitter
+  - Retrieve latest home timeline from Twitter
 
 
 ## How To Use (for Mac):
@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab6_ServicesAndResources
+    git checkout Lab7_Pojos
     ```
 
 ### Create your YML File

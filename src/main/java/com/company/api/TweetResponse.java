@@ -1,7 +1,5 @@
 package com.company.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class TweetResponse {
 
     private String content;
@@ -13,7 +11,6 @@ public class TweetResponse {
         this.content = content;
     }
 
-    @JsonProperty
     public String getContent(){
         return content;
     }
