@@ -54,9 +54,9 @@ public class TwitterService {
         try {
             ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
             List<TwitterPost> timelineResponses = new ArrayList<>();
-            for (Status s : homeTimeline) {
-                User user = buildUser(s.getUser());
-                TwitterPost twitterPost = buildTwitterPost(user, s);
+            for (Status status : homeTimeline) {
+                User user = buildUser(status.getUser());
+                TwitterPost twitterPost = buildTwitterPost(user, status);
                 timelineResponses.add(twitterPost);
             }
             return Response.ok(timelineResponses).build();
@@ -66,7 +66,7 @@ public class TwitterService {
         }
     }
 
-    private Twitter buildTwitter(TwitterAppConfigurationKeys keys){
+    private Twitter buildTwitter(TwitterAppConfigurationKeys keys) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
                 .setOAuthConsumerKey(keys.getoAuthConsumerKey())
@@ -77,19 +77,11 @@ public class TwitterService {
         return tf.getInstance();
     }
 
-    private User buildUser(twitter4j.User user){
-        User twitterUser = new User();
-        twitterUser.setTwitterHandle(user.getScreenName());
-        twitterUser.setProfileImageUrl(user.getProfileImageURL());
-        twitterUser.setName(user.getName());
-        return twitterUser;
+    private User buildUser(twitter4j.User user) {
+        return new User(user.getScreenName(), user.getName(), user.getProfileImageURL());
     }
 
-    private TwitterPost buildTwitterPost(User user, Status status){
-        TwitterPost twitterPost = new TwitterPost();
-        twitterPost.setCreatedAt(status.getCreatedAt());
-        twitterPost.setMessage(status.getText());
-        twitterPost.setUser(user);
-        return twitterPost;
+    private TwitterPost buildTwitterPost(User user, Status status) {
+        return new TwitterPost(user, status.getText(), status.getCreatedAt());
     }
 }
