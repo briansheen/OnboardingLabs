@@ -2,8 +2,6 @@ package com.company.services;
 
 
 import com.company.TwitterAppConfigurationKeys;
-import com.company.api.TweetResponse;
-import com.company.api.TwitterErrorResponse;
 import com.company.models.TwitterPost;
 import com.company.models.User;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +15,6 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.conf.ConfigurationBuilder;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,42 +32,36 @@ public class TwitterService {
         return instance;
     }
 
-    public Response postTweet(String message, TwitterAppConfigurationKeys keys) {
-        if (StringUtils.isAllBlank(message) || message.length() > 280) {
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Form Parameter 'message' cannot be null, empty white spaces, or longer than 280 characters.")).build();
-        }
+    public TwitterPost postTweet(String message, TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
             Status status = twitter.updateStatus(message);
-            return Response.ok(new TweetResponse(status.getText())).build();
+            return new TwitterPost(new User(status.getUser().getScreenName(),status.getUser().getName(),status.getUser().getProfileImageURL()),status.getText(),status.getCreatedAt());
         } catch (TwitterException e) {
             logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to post your tweet.")).build();
+            return null;
         }
     }
 
-    public Response getTimeline(TwitterAppConfigurationKeys keys) {
+    public List<TwitterPost> getTimeline(TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
-            return Response.ok(buildTimelineList(twitter.getHomeTimeline())).build();
+            return buildTimelineList(twitter.getHomeTimeline());
         } catch (TwitterException e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your twitter timeline.")).build();
+            return null;
         }
     }
 
-    public Response getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) {
-        if(StringUtils.isAllBlank(filter)){
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Query Parameter 'filter' cannot be null or empty white spaces.")).build();
-        }
+    public List<TwitterPost> getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
-            return Response.ok(buildTimelineList(twitter.getHomeTimeline()).stream()
+            return buildTimelineList(twitter.getHomeTimeline()).stream()
                     .filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(), filter))
-                    .collect(Collectors.toList())).build();
+                    .collect(Collectors.toList());
         } catch (TwitterException e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your filtered twitter timeline.")).build();
+            return null;
         }
     }
 
