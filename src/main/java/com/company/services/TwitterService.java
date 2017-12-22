@@ -18,7 +18,6 @@ import twitter4j.TwitterException;
 import twitter4j.conf.ConfigurationBuilder;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +37,7 @@ public class TwitterService {
 
     public Response postTweet(String message, TwitterAppConfigurationKeys keys) {
         if (StringUtils.isAllBlank(message) || message.length() > 280) {
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Message parameter cannot be null, empty white spaces, or longer than 280 characters.")).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Form Parameter 'message' cannot be null, empty white spaces, or longer than 280 characters.")).build();
         }
         Twitter twitter = buildTwitter(keys);
         try {
@@ -63,15 +62,15 @@ public class TwitterService {
     }
 
     public Response getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) {
+        if(StringUtils.isAllBlank(filter)){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Query Parameter 'filter' cannot be null or empty white spaces.")).build();
+        }
         Twitter twitter = buildTwitter(keys);
         try {
             ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
             List<TwitterPost> timelineResponses = buildTimelineList(homeTimeline);
-            if (StringUtils.isAllBlank(filter)) {
-                return Response.ok(timelineResponses).build();
-            }
             List<TwitterPost> filteredTimeline =
-                    timelineResponses.stream().filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(),filter)).collect(Collectors.toList());
+                    timelineResponses.stream().filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(), filter)).collect(Collectors.toList());
             return Response.ok(filteredTimeline).build();
         } catch (TwitterException e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
@@ -91,12 +90,8 @@ public class TwitterService {
     }
 
     private List<TwitterPost> buildTimelineList(ResponseList<Status> homeTimeline) {
-        List<TwitterPost> timelineResponses = new ArrayList<>();
-        for (Status status : homeTimeline) {
-            User user = new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL());
-            TwitterPost twitterPost = new TwitterPost(user, status.getText(), status.getCreatedAt());
-            timelineResponses.add(twitterPost);
-        }
-        return timelineResponses;
+        return homeTimeline.stream()
+                .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 }
