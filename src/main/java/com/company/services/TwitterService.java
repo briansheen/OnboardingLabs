@@ -52,9 +52,7 @@ public class TwitterService {
     public Response getTimeline(TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
-            ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
-            List<TwitterPost> timelineResponses = buildTimelineList(homeTimeline);
-            return Response.ok(timelineResponses).build();
+            return Response.ok(buildTimelineList(twitter.getHomeTimeline())).build();
         } catch (TwitterException e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your twitter timeline.")).build();
@@ -67,11 +65,9 @@ public class TwitterService {
         }
         Twitter twitter = buildTwitter(keys);
         try {
-            ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
-            List<TwitterPost> timelineResponses = buildTimelineList(homeTimeline);
-            List<TwitterPost> filteredTimeline =
-                    timelineResponses.stream().filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(), filter)).collect(Collectors.toList());
-            return Response.ok(filteredTimeline).build();
+            return Response.ok(buildTimelineList(twitter.getHomeTimeline()).stream()
+                    .filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(), filter))
+                    .collect(Collectors.toList())).build();
         } catch (TwitterException e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your filtered twitter timeline.")).build();
