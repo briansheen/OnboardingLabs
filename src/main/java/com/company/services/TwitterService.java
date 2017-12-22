@@ -20,6 +20,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TwitterService {
     private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
@@ -53,16 +54,28 @@ public class TwitterService {
         Twitter twitter = buildTwitter(keys);
         try {
             ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
-            List<TwitterPost> timelineResponses = new ArrayList<>();
-            for (Status status : homeTimeline) {
-                User user = new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL());
-                TwitterPost twitterPost = new TwitterPost(user, status.getText(), status.getCreatedAt());
-                timelineResponses.add(twitterPost);
-            }
+            List<TwitterPost> timelineResponses = buildTimelineList(homeTimeline);
             return Response.ok(timelineResponses).build();
         } catch (TwitterException e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your twitter timeline.")).build();
+        }
+    }
+
+    public Response getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) {
+        Twitter twitter = buildTwitter(keys);
+        try {
+            ResponseList<Status> homeTimeline = twitter.getHomeTimeline();
+            List<TwitterPost> timelineResponses = buildTimelineList(homeTimeline);
+            if (StringUtils.isAllBlank(filter)) {
+                return Response.ok(timelineResponses).build();
+            }
+            List<TwitterPost> filteredTimeline =
+                    timelineResponses.stream().filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(),filter)).collect(Collectors.toList());
+            return Response.ok(filteredTimeline).build();
+        } catch (TwitterException e) {
+            logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your filtered twitter timeline.")).build();
         }
     }
 
@@ -75,5 +88,15 @@ public class TwitterService {
                 .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         return tf.getInstance();
+    }
+
+    private List<TwitterPost> buildTimelineList(ResponseList<Status> homeTimeline) {
+        List<TwitterPost> timelineResponses = new ArrayList<>();
+        for (Status status : homeTimeline) {
+            User user = new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL());
+            TwitterPost twitterPost = new TwitterPost(user, status.getText(), status.getCreatedAt());
+            timelineResponses.add(twitterPost);
+        }
+        return timelineResponses;
     }
 }

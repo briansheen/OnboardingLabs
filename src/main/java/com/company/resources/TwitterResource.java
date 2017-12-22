@@ -4,11 +4,7 @@ package com.company.resources;
 import com.company.TwitterAppConfiguration;
 import com.company.services.TwitterService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,5 +28,11 @@ public class TwitterResource {
     @Path("/timeline")
     public Response getTimeline() {
         return twitterService.getTimeline(configuration.getTwitterKeys());
+    }
+
+    @GET
+    @Path("/filter")
+    public Response getFilteredTimeline(@QueryParam("filter") String filter){
+        return twitterService.getFilteredTimeline(filter, configuration.getTwitterKeys());
     }
 }
