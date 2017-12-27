@@ -31,9 +31,6 @@ public class TwitterResource {
     @POST
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {
-        if (StringUtils.isAllBlank(message) || message.length() > 280) {
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Form Parameter 'message' cannot be null, empty white spaces, or longer than 280 characters.")).build();
-        }
         TwitterPost twitterPost = twitterService.postTweet(message, configuration.getTwitterKeys());
         if(twitterPost!=null){
             return Response.ok(twitterPost).build();

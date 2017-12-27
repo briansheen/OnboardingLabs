@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import twitter4j.ResponseList;
 import twitter4j.TwitterFactory;
 import twitter4j.Status;
 import twitter4j.Twitter;
@@ -34,9 +33,12 @@ public class TwitterService {
 
     public TwitterPost postTweet(String message, TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
+        if (StringUtils.isAllBlank(message) || message.length() > 280) {
+            logger.error("Form Parameter 'message' cannot be null, empty white spaces, or longer than 280 characters.");
+        }
         try {
             Status status = twitter.updateStatus(message);
-            return new TwitterPost(new User(status.getUser().getScreenName(),status.getUser().getName(),status.getUser().getProfileImageURL()),status.getText(),status.getCreatedAt());
+            return new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt());
         } catch (TwitterException e) {
             logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return null;
@@ -46,7 +48,9 @@ public class TwitterService {
     public List<TwitterPost> getTimeline(TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
-            return buildTimelineList(twitter.getHomeTimeline());
+            return twitter.getHomeTimeline().stream()
+                    .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                    .collect(Collectors.toList());
         } catch (TwitterException e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return null;
@@ -56,8 +60,9 @@ public class TwitterService {
     public List<TwitterPost> getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         try {
-            return buildTimelineList(twitter.getHomeTimeline()).stream()
-                    .filter(tweet -> StringUtils.containsIgnoreCase(tweet.getMessage(), filter))
+            return twitter.getHomeTimeline().stream()
+                    .filter(status -> StringUtils.containsIgnoreCase(status.getText(), filter))
+                    .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
                     .collect(Collectors.toList());
         } catch (TwitterException e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
@@ -74,11 +79,5 @@ public class TwitterService {
                 .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         return tf.getInstance();
-    }
-
-    private List<TwitterPost> buildTimelineList(ResponseList<Status> homeTimeline) {
-        return homeTimeline.stream()
-                .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
-                .collect(Collectors.toList());
     }
 }
