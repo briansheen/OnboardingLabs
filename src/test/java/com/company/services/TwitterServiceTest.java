@@ -36,7 +36,7 @@ public class TwitterServiceTest {
         TwitterService twitterService = TwitterService.getInstance();
         twitterService.setTwitter(twitterMock);
         TwitterPost expected = new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), "I am a fixture status", new Date(1514908981));
-        assertEquals(twitterService.postTweet("this is a good string!", mockKeys), expected);
+        assertEquals(expected, twitterService.postTweet("this is a good string!", mockKeys));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class TwitterServiceTest {
     }
 
     @Test
-    public void timelineGood() throws TwitterException{
+    public void timelineGood() throws TwitterException {
         ResponseList<Status> responseList = mock(ResponseList.class);
         responseList.add(getFixtureStatus());
         when(twitterMock.getHomeTimeline()).thenReturn(responseList);
@@ -75,7 +75,7 @@ public class TwitterServiceTest {
         twitterService.setTwitter(twitterMock);
         List<TwitterPost> expected = new ArrayList<>();
         expected.add(new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), "I am a fixture status", new Date(1514908981)));
-        assertEquals(twitterService.getTimeline(mockKeys),expected);
+        assertEquals(expected, twitterService.getTimeline(mockKeys));
     }
 
     private Status getFixtureStatus() {
