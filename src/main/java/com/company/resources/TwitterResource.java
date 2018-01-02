@@ -6,6 +6,7 @@ import com.company.api.TwitterErrorResponse;
 import com.company.models.TwitterPost;
 import com.company.services.TwitterService;
 import org.apache.commons.lang3.StringUtils;
+import twitter4j.TwitterException;
 
 
 import javax.ws.rs.GET;
@@ -31,33 +32,36 @@ public class TwitterResource {
     @POST
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {
-        TwitterPost twitterPost = twitterService.postTweet(message, configuration.getTwitterKeys());
-        if(twitterPost!=null){
+        try {
+            TwitterPost twitterPost = twitterService.postTweet(message, configuration.getTwitterKeys());
             return Response.ok(twitterPost).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to post your tweet.")).build();
+        catch (TwitterException e){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
     }
 
     @GET
     @Path("/timeline")
     public Response getTimeline() {
-        List<TwitterPost> homeTimeline = twitterService.getTimeline(configuration.getTwitterKeys());
-        if(homeTimeline!=null){
+        try{
+            List<TwitterPost> homeTimeline = twitterService.getTimeline(configuration.getTwitterKeys());
             return Response.ok(homeTimeline).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your twitter timeline.")).build();
+        catch(TwitterException e){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
     }
 
     @GET
     @Path("/filter")
     public Response getFilteredTimeline(@QueryParam("filter") String filter){
-        if(StringUtils.isAllBlank(filter)){
-            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "Query Parameter 'filter' cannot be null or empty white spaces.")).build();
-        }
-        List<TwitterPost> filteredTimeline = twitterService.getFilteredTimeline(filter, configuration.getTwitterKeys());
-        if(filteredTimeline!=null){
+        try {
+            List<TwitterPost> filteredTimeline = twitterService.getFilteredTimeline(filter, configuration.getTwitterKeys());
             return Response.ok(filteredTimeline).build();
         }
-        return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), "There was an error when trying to get your filtered twitter timeline.")).build();
+        catch (TwitterException e){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
     }
 }
