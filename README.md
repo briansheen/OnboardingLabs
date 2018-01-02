@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab7_Pojos
+    git checkout Lab8_JavaStreams
     ```
 
 ### Create your YML File
@@ -41,6 +41,16 @@
 or
 
     curl localhost:8080/api/1.0/twitter/timeline
+
+
+#### GetFilteredTimeline
+
+  - enter http://localhost:8080/api/1.0/twitter/filter?filter={your filter} into your URL bar in a web browser
+
+or
+
+    curl localhost:8080/api/1.0/twitter/filter?filter={your filter}
+
 
 #### Tweet
 
