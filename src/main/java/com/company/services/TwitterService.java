@@ -3,7 +3,7 @@ package com.company.services;
 
 import com.company.TwitterAppConfigurationKeys;
 import com.company.models.TwitterPost;
-import com.company.models.User;
+import com.company.models.TwitterUser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class TwitterService {
     private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
     private static TwitterService instance = null;
+    private Twitter twitter;
 
     private TwitterService() {
     }
@@ -31,6 +32,10 @@ public class TwitterService {
         return instance;
     }
 
+    public void setTwitter(Twitter twitter) {
+        this.twitter = twitter;
+    }
+
     public TwitterPost postTweet(String message, TwitterAppConfigurationKeys keys) {
         Twitter twitter = buildTwitter(keys);
         if (StringUtils.isAllBlank(message) || message.length() > 280) {
@@ -38,7 +43,7 @@ public class TwitterService {
         }
         try {
             Status status = twitter.updateStatus(message);
-            return new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt());
+            return new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt());
         } catch (TwitterException e) {
             logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             return null;
@@ -49,7 +54,7 @@ public class TwitterService {
         Twitter twitter = buildTwitter(keys);
         try {
             return twitter.getHomeTimeline().stream()
-                    .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
                     .collect(Collectors.toList());
         } catch (TwitterException e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
@@ -62,7 +67,7 @@ public class TwitterService {
         try {
             return twitter.getHomeTimeline().stream()
                     .filter(status -> StringUtils.containsIgnoreCase(status.getText(), filter))
-                    .map(status -> new TwitterPost(new User(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
                     .collect(Collectors.toList());
         } catch (TwitterException e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
@@ -71,13 +76,18 @@ public class TwitterService {
     }
 
     private Twitter buildTwitter(TwitterAppConfigurationKeys keys) {
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setDebugEnabled(true)
-                .setOAuthConsumerKey(keys.getoAuthConsumerKey())
-                .setOAuthConsumerSecret(keys.getoAuthConsumerSecret())
-                .setOAuthAccessToken(keys.getoAuthAccessToken())
-                .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
-        TwitterFactory tf = new TwitterFactory(cb.build());
-        return tf.getInstance();
+        if (twitter == null) {
+            ConfigurationBuilder cb = new ConfigurationBuilder();
+            cb.setDebugEnabled(true)
+                    .setOAuthConsumerKey(keys.getoAuthConsumerKey())
+                    .setOAuthConsumerSecret(keys.getoAuthConsumerSecret())
+                    .setOAuthAccessToken(keys.getoAuthAccessToken())
+                    .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
+            TwitterFactory tf = new TwitterFactory(cb.build());
+            return tf.getInstance();
+        }
+        return twitter;
     }
+
+
 }
