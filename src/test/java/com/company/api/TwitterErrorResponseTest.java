@@ -1,13 +1,17 @@
 package com.company.api;
 
+import ch.qos.logback.core.status.Status;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.ws.rs.core.Response;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class TwitterErrorResponseTest {
     private TwitterErrorResponse twitterErrorResponse;
+
 
     @Before
     public void setup(){
@@ -19,8 +23,8 @@ public class TwitterErrorResponseTest {
         assertEquals(0, twitterErrorResponse.getErrorCode());
         assertNull(twitterErrorResponse.getErrorMessage());
 
-        int errorCode = 404;
-        String errorMessage = "Not Found";
+        int errorCode = Response.Status.NOT_FOUND.getStatusCode();
+        String errorMessage = Response.Status.NOT_FOUND.getReasonPhrase();
 
         twitterErrorResponse = new TwitterErrorResponse(errorCode, errorMessage);
 
@@ -30,8 +34,8 @@ public class TwitterErrorResponseTest {
 
     @Test
     public void testTwitterErrorResponseSetters(){
-        int errorCode = 400;
-        String errorMessage = "Bad Request";
+        int errorCode = Response.Status.BAD_REQUEST.getStatusCode();
+        String errorMessage = Response.Status.BAD_REQUEST.getReasonPhrase();
 
         twitterErrorResponse.setErrorCode(errorCode);
         twitterErrorResponse.setErrorMessage(errorMessage);

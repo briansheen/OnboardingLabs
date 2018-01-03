@@ -8,13 +8,13 @@ public class TwitterUser {
     private String name;
     private String profileImageUrl;
 
+    public TwitterUser() {
+    }
+
     public TwitterUser(String twitterHandle, String name, String profileImageUrl) {
         this.twitterHandle = twitterHandle;
         this.name = name;
         this.profileImageUrl = profileImageUrl;
-    }
-
-    public TwitterUser() {
     }
 
     public String getTwitterHandle() {

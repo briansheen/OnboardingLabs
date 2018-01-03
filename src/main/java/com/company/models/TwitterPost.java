@@ -9,13 +9,13 @@ public class TwitterPost {
     private String message;
     private Date createdAt;
 
+    public TwitterPost() {
+    }
+
     public TwitterPost(TwitterUser twitterUser, String message, Date createdAt) {
         this.twitterUser = twitterUser;
         this.message = message;
         this.createdAt = createdAt;
-    }
-
-    public TwitterPost() {
     }
 
     public TwitterUser getTwitterUser() {
