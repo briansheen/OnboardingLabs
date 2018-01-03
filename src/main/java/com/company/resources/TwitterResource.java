@@ -29,6 +29,10 @@ public class TwitterResource {
         this.configuration = configuration;
     }
 
+    public void setTwitterService(TwitterService twitterService) {
+        this.twitterService = twitterService;
+    }
+
     @POST
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {
