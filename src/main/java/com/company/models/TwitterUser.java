@@ -14,6 +14,9 @@ public class TwitterUser {
         this.profileImageUrl = profileImageUrl;
     }
 
+    public TwitterUser() {
+    }
+
     public String getTwitterHandle() {
         return twitterHandle;
     }

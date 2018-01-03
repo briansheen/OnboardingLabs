@@ -15,6 +15,9 @@ public class TwitterPost {
         this.createdAt = createdAt;
     }
 
+    public TwitterPost() {
+    }
+
     public TwitterUser getTwitterUser() {
         return twitterUser;
     }
