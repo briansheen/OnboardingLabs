@@ -26,9 +26,39 @@ public class TwitterServiceTest {
     @Before
     public void setup() {
         twitterMock = mock(Twitter.class);
-        mockKeys = new TwitterAppConfigurationKeys();
+
+        mockKeys = mock(TwitterAppConfigurationKeys.class);
+
+        when(mockKeys.getoAuthConsumerKey()).thenReturn("good consumer key");
+        when(mockKeys.getoAuthConsumerSecret()).thenReturn("good consumer secret");
+        when(mockKeys.getoAuthAccessToken()).thenReturn("good access token");
+        when(mockKeys.getoAuthAccessTokenSecret()).thenReturn("good token secret");
+
         twitterService = TwitterService.getInstance();
         twitterService.setTwitter(twitterMock);
+    }
+
+    @Test
+    public void testNullTwitterObject() throws TwitterException {
+        String message = "this shouldn't be posted!";
+        String expectedMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+        twitterMock = null;
+        twitterService.setTwitter(twitterMock);
+        try {
+            twitterService.postTweet(message, mockKeys);
+        } catch (TwitterException e) {
+            assertEquals(expectedMessage, e.getMessage());
+        }
+        try {
+            twitterService.getTimeline(mockKeys);
+        } catch (TwitterException e) {
+            assertEquals(expectedMessage, e.getMessage());
+        }
+        try {
+            twitterService.getFilteredTimeline("doesn't matter", mockKeys);
+        } catch (TwitterException e) {
+            assertEquals(expectedMessage, e.getMessage());
+        }
     }
 
     @Test

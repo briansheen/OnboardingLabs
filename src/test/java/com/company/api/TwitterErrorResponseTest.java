@@ -38,11 +38,23 @@ public class TwitterErrorResponseTest {
 
         twitterErrorResponse = new TwitterErrorResponse(errorCode, errorMessage);
 
+        assertTrue(twitterErrorResponse.equals(twitterErrorResponse));
+
         TwitterErrorResponse twitterErrorResponseCopy = new TwitterErrorResponse(errorCode, errorMessage);
 
-        assertTrue(twitterErrorResponse.equals(twitterErrorResponseCopy));
-
         assertEquals(twitterErrorResponse.hashCode(), twitterErrorResponseCopy.hashCode());
+
+        twitterErrorResponseCopy.setErrorCode(Response.Status.NOT_ACCEPTABLE.getStatusCode());
+
+        assertFalse(twitterErrorResponse.equals(twitterErrorResponseCopy));
+
+        twitterErrorResponseCopy.setErrorCode(errorCode);
+        twitterErrorResponseCopy.setErrorMessage(Response.Status.NOT_ACCEPTABLE.getReasonPhrase());
+
+        assertFalse(twitterErrorResponse.equals(twitterErrorResponseCopy));
+
+        assertFalse(twitterErrorResponse.equals(null));
+        assertFalse(twitterErrorResponse.equals(errorMessage));
     }
 
     @Test

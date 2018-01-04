@@ -41,13 +41,29 @@ public class TwitterPostTest {
 
         twitterPost = new TwitterPost(twitterUser, message, createdAt);
 
+        assertTrue(twitterPost.equals(twitterPost));
+
         TwitterPost twitterPostCopy = new TwitterPost(twitterUser, message, createdAt);
 
-        assertTrue(twitterPost.equals(twitterPostCopy));
-
         assertEquals(twitterPost.hashCode(),twitterPostCopy.hashCode());
-
         assertEquals(twitterPost.toString(), twitterPostCopy.toString());
+
+        twitterPostCopy.setTwitterUser(new TwitterUser());
+
+        assertFalse(twitterPost.equals(twitterPostCopy));
+
+        twitterPostCopy.setTwitterUser(twitterUser);
+        twitterPostCopy.setMessage("Chocolate Chip");
+
+        assertFalse(twitterPost.equals(twitterPostCopy));
+
+        twitterPostCopy.setMessage(message);
+        twitterPostCopy.setCreatedAt(new Date(1515099274));
+
+        assertFalse(twitterPost.equals(twitterPostCopy));
+
+        assertFalse(twitterPost.equals(null));
+        assertFalse(twitterPost.equals(twitterUser));
     }
 
     @Test

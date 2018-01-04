@@ -38,13 +38,29 @@ public class TwitterUserTest {
 
         twitterUser = new TwitterUser(twitterHandle, name, profileImageUrl);
 
+        assertTrue(twitterUser.equals(twitterUser));
+
         TwitterUser twitterUserCopy = new TwitterUser(twitterHandle, name, profileImageUrl);
 
-        assertTrue(twitterUser.equals(twitterUserCopy));
-
-        assertEquals(twitterUser.hashCode(),twitterUserCopy.hashCode());
-
+        assertEquals(twitterUser.hashCode(), twitterUserCopy.hashCode());
         assertEquals(twitterUser.toString(), twitterUserCopy.toString());
+
+        twitterUserCopy.setTwitterHandle("TopoChicoMx");
+
+        assertFalse(twitterUser.equals(twitterUserCopy));
+
+        twitterUserCopy.setTwitterHandle(twitterHandle);
+        twitterUserCopy.setName("Topo Chico Mx");
+
+        assertFalse(twitterUser.equals(twitterUserCopy));
+
+        twitterUserCopy.setName(name);
+        twitterUserCopy.setProfileImageUrl("https://pbs.twimg.com/profile_images/639514172682801152/czLUt07i_400x400.jpg");
+
+        assertFalse(twitterUser.equals(twitterUserCopy));
+
+        assertFalse(twitterUser.equals(null));
+        assertFalse(twitterUser.equals(twitterHandle));
     }
 
     @Test

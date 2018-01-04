@@ -45,7 +45,7 @@ public class TwitterService {
         }
         try {
             Status status = twitter.updateStatus(message);
-            return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(),s.getUser().getName(),s.getUser().getProfileImageURL()),s.getText(),s.getCreatedAt())).collect(Collectors.toList()).get(0);
+            return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt())).collect(Collectors.toList()).get(0);
         } catch (TwitterException e) {
             logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
@@ -66,7 +66,7 @@ public class TwitterService {
 
     public List<TwitterPost> getFilteredTimeline(String filter, TwitterAppConfigurationKeys keys) throws TwitterException {
         Twitter twitter = buildTwitter(keys);
-        if(StringUtils.isAllBlank(filter)){
+        if (StringUtils.isAllBlank(filter)) {
             logger.error("Query Parameter 'filter' cannot be null or empty white spaces.");
             throw new TwitterException("Filter parameter cannot be null or empty white spaces.");
         }
