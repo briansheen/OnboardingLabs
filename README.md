@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab8_JavaStreams
+    git checkout Lab9_UnitTesting
     ```
 
 ### Create your YML File

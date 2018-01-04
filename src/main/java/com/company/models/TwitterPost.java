@@ -1,25 +1,29 @@
 package com.company.models;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class TwitterPost {
 
-    private User user;
+    private TwitterUser twitterUser;
     private String message;
     private Date createdAt;
 
-    public TwitterPost(User user, String message, Date createdAt) {
-        this.user = user;
+    public TwitterPost() {
+    }
+
+    public TwitterPost(TwitterUser twitterUser, String message, Date createdAt) {
+        this.twitterUser = twitterUser;
         this.message = message;
         this.createdAt = createdAt;
     }
 
-    public User getUser() {
-        return user;
+    public TwitterUser getTwitterUser() {
+        return twitterUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setTwitterUser(TwitterUser twitterUser) {
+        this.twitterUser = twitterUser;
     }
 
     public String getMessage() {
@@ -36,5 +40,30 @@ public class TwitterPost {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "TwitterPost{" +
+                "twitterUser=" + twitterUser +
+                ", message='" + message + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TwitterPost that = (TwitterPost) o;
+        return Objects.equals(twitterUser, that.twitterUser) &&
+                Objects.equals(message, that.message) &&
+                Objects.equals(createdAt, that.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(twitterUser, message, createdAt);
     }
 }
