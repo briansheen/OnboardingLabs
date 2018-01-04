@@ -15,6 +15,7 @@
         <slf4j-api-version>1.7.25</slf4j-api-version>
         <mockito-core-version>2.13.0</mockito-core-version>
         <junit-version>4.12</junit-version>
+        <jacoco-maven-plugin-version>0.8.0</jacoco-maven-plugin-version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,12 @@
             <artifactId>junit</artifactId>
             <version>${junit-version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${jacoco-maven-plugin-version}</version>
         </dependency>
 
 
@@ -110,6 +117,25 @@
                                 </transformer>
                             </transformers>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

@@ -33,10 +33,6 @@ public class TwitterResource {
         this.twitterService = twitterService;
     }
 
-    public TwitterService getTwitterService() {
-        return twitterService;
-    }
-
     @POST
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {

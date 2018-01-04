@@ -1,18 +1,18 @@
 package com.company.models;
 
+import com.company.api.TwitterErrorResponse;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class TwitterPostTest {
     private TwitterPost twitterPost;
 
     @Before
-    public void setup(){
+    public void setup() {
         twitterPost = new TwitterPost();
     }
 
@@ -34,7 +34,24 @@ public class TwitterPostTest {
     }
 
     @Test
-    public void testTwitterPostSetters(){
+    public void testTwitterPostHashEqualsAndToString() {
+        TwitterUser twitterUser = new TwitterUser("ClifBar", "CLIF Bar", "https://pbs.twimg.com/profile_images/880842933590568960/Lv_OB29W_400x400.jpg");
+        String message = "Crunchy Peanut Butter";
+        Date createdAt = new Date(1515019973);
+
+        twitterPost = new TwitterPost(twitterUser, message, createdAt);
+
+        TwitterPost twitterPostCopy = new TwitterPost(twitterUser, message, createdAt);
+
+        assertTrue(twitterPost.equals(twitterPostCopy));
+
+        assertEquals(twitterPost.hashCode(),twitterPostCopy.hashCode());
+
+        assertEquals(twitterPost.toString(), twitterPostCopy.toString());
+    }
+
+    @Test
+    public void testTwitterPostSetters() {
         TwitterUser twitterUser = new TwitterUser("ClifBar", "CLIF Bar", "https://pbs.twimg.com/profile_images/880842933590568960/Lv_OB29W_400x400.jpg");
         String message = "Crunchy Peanut Butter";
         Date createdAt = new Date(1515019973);

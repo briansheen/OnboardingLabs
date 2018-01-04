@@ -21,17 +21,22 @@
     ```
 
 ### Create your YML File
-    create and open {your-file-name}.yml
 
+  - create and open {your-file-name}.yml
   - fill in oAuthConsumerKey, oAuthConsumerSecret, oAuthAccessToken, oAuthAccessTokenSecret with your own Twitter app credentials under the twitterKey parent class
   - see twitter-app-example.yml for example
 
+
+### See Test Coverage
+
+    mvn test
+
+  - After running mvn test, open the Jacoco generated html file located at: {location of your project directory}/OnboardingLabs/target/site/jacoco/index.html
 
 ### Run Using Maven
 
     mvn package
     java -jar target/OnboardingLabs-1.0-SNAPSHOT.jar server {your-file-name}.yml
-
 
 
 #### GetTimeline
