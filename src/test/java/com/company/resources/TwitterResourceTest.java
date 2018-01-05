@@ -108,6 +108,19 @@ public class TwitterResourceTest {
     }
 
     @Test
+    public void testGetTimelineException() throws TwitterException {
+        String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+        when(twitterServiceMock.getTimeline(mockKeys)).thenThrow(new TwitterException(expectedErrorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), expectedErrorMessage)).build();
+        Response actual = twitterResource.getTimeline();
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
     public void testGetFilteredTimeline() throws TwitterException {
         List<TwitterPost> expectedFilteredTimeline = new ArrayList<>();
         expectedFilteredTimeline.add(getTwitterPost("someone's good post"));
