@@ -12,12 +12,10 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Singleton
 public class TwitterService {
     private static Logger logger = LoggerFactory.getLogger(TwitterService.class);
     private Twitter twitter;

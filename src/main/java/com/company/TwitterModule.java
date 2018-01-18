@@ -1,6 +1,5 @@
 package com.company;
 
-import com.company.resources.TwitterResource;
 import com.company.services.TwitterService;
 import dagger.Module;
 import dagger.Provides;
@@ -28,15 +27,5 @@ public class TwitterModule {
                 .setOAuthAccessTokenSecret(keys.getoAuthAccessTokenSecret());
         TwitterFactory tf = new TwitterFactory(cb.build());
         return tf.getInstance();
-    }
-
-    @Provides
-    public TwitterService provideTwitterService(Twitter twitter){
-        return new TwitterService(twitter);
-    }
-
-    @Provides
-    public TwitterResource provideTwitterResource(TwitterService twitterService){
-        return new TwitterResource(twitterService);
     }
 }
