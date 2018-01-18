@@ -11,13 +11,14 @@ import twitter4j.conf.ConfigurationBuilder;
 @Module
 public class TwitterModule {
 
-    private static TwitterAppConfiguration configuration;
+    private TwitterAppConfiguration configuration;
 
     public TwitterModule(TwitterAppConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    @Provides static Twitter provideTwitter(){
+    @Provides
+    public Twitter provideTwitter(){
         TwitterAppConfigurationKeys keys = configuration.getTwitterKeys();
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setDebugEnabled(true)
@@ -29,8 +30,8 @@ public class TwitterModule {
         return tf.getInstance();
     }
 
-    @Provides static TwitterService provideTwitterService(){
-        TwitterService twitterService = new TwitterService(TwitterModule.provideTwitter());
-        return twitterService;
+    @Provides
+    public TwitterService provideTwitterService(Twitter twitter){
+        return new TwitterService(twitter);
     }
 }

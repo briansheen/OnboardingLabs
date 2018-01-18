@@ -6,6 +6,5 @@ import twitter4j.Twitter;
 
 @Component(modules = {TwitterModule.class})
 public interface TwitterComponent {
-    Twitter getTwitter();
     TwitterService getTwitterService();
 }
