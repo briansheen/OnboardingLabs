@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab9_UnitTesting
+    git checkout Lab10_DependencyInjection
     ```
 
 ### Create your YML File
