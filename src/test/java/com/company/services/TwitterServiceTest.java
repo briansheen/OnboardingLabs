@@ -20,22 +20,12 @@ import static org.mockito.Mockito.when;
 public class TwitterServiceTest {
 
     private Twitter twitterMock;
-    private TwitterAppConfigurationKeys mockKeys;
     private TwitterService twitterService;
 
     @Before
     public void setup() {
         twitterMock = mock(Twitter.class);
-
-        mockKeys = mock(TwitterAppConfigurationKeys.class);
-
-        when(mockKeys.getoAuthConsumerKey()).thenReturn("good consumer key");
-        when(mockKeys.getoAuthConsumerSecret()).thenReturn("good consumer secret");
-        when(mockKeys.getoAuthAccessToken()).thenReturn("good access token");
-        when(mockKeys.getoAuthAccessTokenSecret()).thenReturn("good token secret");
-
-        twitterService = TwitterService.getInstance();
-        twitterService.setTwitter(twitterMock);
+        twitterService = new TwitterService(twitterMock);
     }
 
     @Test
@@ -43,19 +33,19 @@ public class TwitterServiceTest {
         String message = "this shouldn't be posted!";
         String expectedMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
         twitterMock = null;
-        twitterService.setTwitter(twitterMock);
+        twitterService = new TwitterService(twitterMock);
         try {
-            twitterService.postTweet(message, mockKeys);
+            twitterService.postTweet(message);
         } catch (TwitterException e) {
             assertEquals(expectedMessage, e.getMessage());
         }
         try {
-            twitterService.getTimeline(mockKeys);
+            twitterService.getTimeline();
         } catch (TwitterException e) {
             assertEquals(expectedMessage, e.getMessage());
         }
         try {
-            twitterService.getFilteredTimeline("doesn't matter", mockKeys);
+            twitterService.getFilteredTimeline("doesn't matter");
         } catch (TwitterException e) {
             assertEquals(expectedMessage, e.getMessage());
         }
@@ -66,14 +56,14 @@ public class TwitterServiceTest {
         when(twitterMock.updateStatus(anyString())).thenReturn(getFixtureStatus("I am a fixture status"));
         TwitterPost expected = getExpectedTwitterPost("I am a fixture status");
 
-        assertEquals(expected, twitterService.postTweet("this is a good string!", mockKeys));
+        assertEquals(expected, twitterService.postTweet("this is a good string!"));
     }
 
     @Test
     public void testPostTweetTooLong() {
         String val = RandomString.make(281);
         try {
-            twitterService.postTweet(val, mockKeys);
+            twitterService.postTweet(val);
             fail("Expected a Twitter Exception to be thrown");
         } catch (TwitterException e) {
             assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
@@ -84,7 +74,7 @@ public class TwitterServiceTest {
     public void testPostTweetBlank() {
         String val = "";
         try {
-            twitterService.postTweet(val, mockKeys);
+            twitterService.postTweet(val);
             fail("Expected a Twitter Exception to be thrown");
         } catch (TwitterException e) {
             assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
@@ -95,7 +85,7 @@ public class TwitterServiceTest {
     public void testPostTweetNull() {
         String val = null;
         try {
-            twitterService.postTweet(val, mockKeys);
+            twitterService.postTweet(val);
             fail("Expected a Twitter Exception to be thrown");
         } catch (TwitterException e) {
             assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
@@ -107,7 +97,7 @@ public class TwitterServiceTest {
         String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
         when(twitterMock.updateStatus(anyString())).thenThrow(new TwitterException("mocking that something with Twitter went wrong"));
         try {
-            twitterService.postTweet("Exception should be thrown!", mockKeys);
+            twitterService.postTweet("Exception should be thrown!");
         } catch (TwitterException e) {
             assertEquals(expectedErrorMessage, e.getMessage());
         }
@@ -123,7 +113,7 @@ public class TwitterServiceTest {
         List<TwitterPost> expected = new ArrayList<>();
         expected.add(getExpectedTwitterPost("I am a fixture status"));
 
-        assertEquals(expected, twitterService.getTimeline(mockKeys));
+        assertEquals(expected, twitterService.getTimeline());
     }
 
     @Test
@@ -131,7 +121,7 @@ public class TwitterServiceTest {
         String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
         when(twitterMock.getHomeTimeline()).thenThrow(new TwitterException("mocking that something with Twitter went wrong"));
         try {
-            twitterService.getTimeline(mockKeys);
+            twitterService.getTimeline();
         } catch (TwitterException e) {
             assertEquals(expectedErrorMessage, e.getMessage());
         }
@@ -148,18 +138,18 @@ public class TwitterServiceTest {
         List<TwitterPost> expected = new ArrayList<>();
         expected.add(getExpectedTwitterPost("Hello is in this one"));
 
-        assertEquals(expected, twitterService.getFilteredTimeline("hello", mockKeys));
+        assertEquals(expected, twitterService.getFilteredTimeline("hello"));
 
         expected.add(getExpectedTwitterPost("But not in this one"));
 
-        assertEquals(expected, twitterService.getFilteredTimeline("one", mockKeys));
+        assertEquals(expected, twitterService.getFilteredTimeline("one"));
     }
 
     @Test
     public void testGetFilteredTimelineBlankFilter() {
         String val = "";
         try {
-            twitterService.getFilteredTimeline(val, mockKeys);
+            twitterService.getFilteredTimeline(val);
             fail("Expected a Twitter Exception to be thrown");
         } catch (TwitterException e) {
             assertEquals("Filter parameter cannot be null or empty white spaces.", e.getMessage());
@@ -170,7 +160,7 @@ public class TwitterServiceTest {
     public void testGetFilteredTimelineNullFilter() {
         String val = null;
         try {
-            twitterService.getFilteredTimeline(val, mockKeys);
+            twitterService.getFilteredTimeline(val);
             fail("Expected a Twitter Exception to be thrown");
         } catch (TwitterException e) {
             assertEquals("Filter parameter cannot be null or empty white spaces.", e.getMessage());
@@ -182,7 +172,7 @@ public class TwitterServiceTest {
         String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
         when(twitterMock.getHomeTimeline()).thenThrow(new TwitterException("mocking that something with Twitter went wrong"));
         try {
-            twitterService.getFilteredTimeline("Exception should be thrown!", mockKeys);
+            twitterService.getFilteredTimeline("Exception should be thrown!");
         } catch (TwitterException e) {
             assertEquals(expectedErrorMessage, e.getMessage());
         }

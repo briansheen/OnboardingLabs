@@ -1,14 +1,12 @@
 package com.company.resources;
 
 
-import com.company.TwitterAppConfiguration;
 import com.company.api.TwitterErrorResponse;
 import com.company.models.TwitterPost;
 import com.company.services.TwitterService;
-import org.apache.commons.lang3.StringUtils;
-import twitter4j.TwitterException;
 
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,14 +20,10 @@ import java.util.List;
 @Path("/api/1.0/twitter")
 @Produces(MediaType.APPLICATION_JSON)
 public class TwitterResource {
-    private final TwitterAppConfiguration configuration;
-    private TwitterService twitterService = TwitterService.getInstance();
+    private TwitterService twitterService;
 
-    public TwitterResource(TwitterAppConfiguration configuration) {
-        this.configuration = configuration;
-    }
-
-    public void setTwitterService(TwitterService twitterService) {
+    @Inject
+    public TwitterResource(TwitterService twitterService) {
         this.twitterService = twitterService;
     }
 
@@ -37,10 +31,10 @@ public class TwitterResource {
     @Path("/tweet")
     public Response addTweet(@FormParam("message") String message) {
         try {
-            TwitterPost twitterPost = twitterService.postTweet(message, configuration.getTwitterKeys());
+            TwitterPost twitterPost = twitterService.postTweet(message);
             return Response.ok(twitterPost).build();
         }
-        catch (TwitterException e){
+        catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
         }
     }
@@ -49,10 +43,10 @@ public class TwitterResource {
     @Path("/timeline")
     public Response getTimeline() {
         try{
-            List<TwitterPost> homeTimeline = twitterService.getTimeline(configuration.getTwitterKeys());
+            List<TwitterPost> homeTimeline = twitterService.getTimeline();
             return Response.ok(homeTimeline).build();
         }
-        catch(TwitterException e){
+        catch(Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
         }
     }
@@ -61,10 +55,10 @@ public class TwitterResource {
     @Path("/filter")
     public Response getFilteredTimeline(@QueryParam("filter") String filter){
         try {
-            List<TwitterPost> filteredTimeline = twitterService.getFilteredTimeline(filter, configuration.getTwitterKeys());
+            List<TwitterPost> filteredTimeline = twitterService.getFilteredTimeline(filter);
             return Response.ok(filteredTimeline).build();
         }
-        catch (TwitterException e){
+        catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
         }
     }

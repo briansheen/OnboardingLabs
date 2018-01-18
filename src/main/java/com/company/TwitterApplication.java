@@ -1,5 +1,6 @@
 package com.company;
 
+import com.company.DaggerTwitterComponent;
 import com.company.resources.TwitterResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -18,7 +19,10 @@ public class TwitterApplication extends Application<TwitterAppConfiguration> {
 
     @Override
     public void run(TwitterAppConfiguration configuration, Environment environment) {
-        final TwitterResource resource = new TwitterResource(configuration);
+        TwitterComponent twitterComponent = DaggerTwitterComponent.builder()
+                .twitterModule(new TwitterModule(configuration))
+                .build();
+        final TwitterResource resource = twitterComponent.getTwitterResource();
         environment.jersey().register(resource);
     }
 }

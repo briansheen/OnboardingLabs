@@ -16,6 +16,7 @@
         <mockito-core-version>2.13.0</mockito-core-version>
         <junit-version>4.12</junit-version>
         <jacoco-maven-plugin-version>0.8.0</jacoco-maven-plugin-version>
+        <dagger-version>2.14.1</dagger-version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,19 @@
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco-maven-plugin-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.dagger</groupId>
+            <artifactId>dagger</artifactId>
+            <version>${dagger-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.dagger</groupId>
+            <artifactId>dagger-compiler</artifactId>
+            <version>${dagger-version}</version>
+            <scope>compile</scope>
         </dependency>
 
 
