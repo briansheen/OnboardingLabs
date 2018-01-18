@@ -1,12 +1,9 @@
 package com.company.resources;
 
 
-import com.company.TwitterAppConfiguration;
 import com.company.api.TwitterErrorResponse;
 import com.company.models.TwitterPost;
 import com.company.services.TwitterService;
-import org.apache.commons.lang3.StringUtils;
-import twitter4j.TwitterException;
 
 
 import javax.inject.Inject;

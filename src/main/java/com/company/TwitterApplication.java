@@ -22,7 +22,7 @@ public class TwitterApplication extends Application<TwitterAppConfiguration> {
         TwitterComponent twitterComponent = DaggerTwitterComponent.builder()
                 .twitterModule(new TwitterModule(configuration))
                 .build();
-        final TwitterResource resource = new TwitterResource(twitterComponent.getTwitterService());
+        final TwitterResource resource = twitterComponent.getTwitterResource();
         environment.jersey().register(resource);
     }
 }

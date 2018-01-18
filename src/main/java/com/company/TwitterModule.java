@@ -34,4 +34,9 @@ public class TwitterModule {
     public TwitterService provideTwitterService(Twitter twitter){
         return new TwitterService(twitter);
     }
+
+    @Provides
+    public TwitterResource provideTwitterResource(TwitterService twitterService){
+        return new TwitterResource(twitterService);
+    }
 }
