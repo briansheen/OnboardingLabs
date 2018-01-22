@@ -32,7 +32,9 @@ public class TwitterResource {
     public Response addTweet(@FormParam("message") String message) {
         try {
             TwitterPost twitterPost = twitterService.postTweet(message);
-            return Response.ok(twitterPost).build();
+            return Response.ok(twitterPost)
+                    .header("Access-Control-Allow-Origin","*")
+                    .build();
         }
         catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
@@ -58,7 +60,9 @@ public class TwitterResource {
     public Response getFilteredTimeline(@QueryParam("filter") String filter){
         try {
             List<TwitterPost> filteredTimeline = twitterService.getFilteredTimeline(filter);
-            return Response.ok(filteredTimeline).build();
+            return Response.ok(filteredTimeline)
+                    .header("Access-Control-Allow-Origin","*")
+                    .build();
         }
         catch (Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
