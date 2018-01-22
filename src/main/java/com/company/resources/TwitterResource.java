@@ -44,7 +44,9 @@ public class TwitterResource {
     public Response getTimeline() {
         try{
             List<TwitterPost> homeTimeline = twitterService.getTimeline();
-            return Response.ok(homeTimeline).build();
+            return Response.ok(homeTimeline)
+                    .header("Access-Control-Allow-Origin","*")
+                    .build();
         }
         catch(Exception e){
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
