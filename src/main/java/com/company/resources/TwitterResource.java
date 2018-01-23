@@ -64,6 +64,6 @@ public class TwitterResource {
     }
 
     private Response okResponse(Object o){
-        return Response.ok(o).header("Access-Control-Allow-Origin","*").build();
+        return Response.ok(o).build();
     }
 }
