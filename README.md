@@ -17,7 +17,7 @@
 
     cd OnboardingLabs/
 
-    git checkout Lab10_DependencyInjection
+    git checkout Lab12_Visualization
     ```
 
 ### Create your YML File
