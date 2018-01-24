@@ -160,7 +160,7 @@ public class TwitterResourceTest {
 
 
     private TwitterPost getTwitterPost(String text) {
-        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981));
+        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345");
     }
 
 }
