@@ -8,6 +8,7 @@ public class FixtureStatus implements Status {
     private Date createdAt;
     private User user;
     private String text;
+    private String id;
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
@@ -21,6 +22,10 @@ public class FixtureStatus implements Status {
         this.text = text;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public Date getCreatedAt() {
         return createdAt;
@@ -28,7 +33,7 @@ public class FixtureStatus implements Status {
 
     @Override
     public long getId() {
-        return 0;
+        return Long.parseLong(id);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class TwitterService {
         }
         try {
             Status status = twitter.updateStatus(message);
-            return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt())).collect(Collectors.toList()).get(0);
+            return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt(), String.valueOf(s.getId()))).collect(Collectors.toList()).get(0);
         } catch (Exception e) {
             logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
@@ -42,7 +42,7 @@ public class TwitterService {
     public List<TwitterPost> getTimeline() throws TwitterException {
         try {
             return twitter.getHomeTimeline().stream()
-                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt(), String.valueOf(status.getId())))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("In getTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
@@ -58,7 +58,7 @@ public class TwitterService {
         try {
             return twitter.getHomeTimeline().stream()
                     .filter(status -> StringUtils.containsIgnoreCase(status.getText(), filter))
-                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt()))
+                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt(), String.valueOf(status.getId())))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("In getFilteredTimeline: There was an error interacting with the Twitter API and/or Twitter Keys.", e);

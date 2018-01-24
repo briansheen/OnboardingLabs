@@ -182,6 +182,7 @@ public class TwitterServiceTest {
         FixtureStatus fixtureStatus = new FixtureStatus();
         fixtureStatus.setCreatedAt(new Date(1514908981));
         fixtureStatus.setText(text);
+        fixtureStatus.setId("12345");
         fixtureStatus.setUser(getFixtureUser());
         return fixtureStatus;
     }
@@ -195,6 +196,6 @@ public class TwitterServiceTest {
     }
 
     private TwitterPost getExpectedTwitterPost(String text) {
-        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981));
+        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345");
     }
 }
