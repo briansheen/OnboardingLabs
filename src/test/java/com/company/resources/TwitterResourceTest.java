@@ -158,6 +158,38 @@ public class TwitterResourceTest {
         assertEquals(expected.getEntity(), actual.getEntity());
     }
 
+    @Test
+    public void testGetMyTweets() throws TwitterException {
+        TwitterPost firstPost = getTwitterPost("my first tweet");
+        TwitterPost secondPost = getTwitterPost("my second tweet");
+
+        List<TwitterPost> expectedMyTweets = new ArrayList<>();
+        expectedMyTweets.add(firstPost);
+        expectedMyTweets.add(secondPost);
+
+        when(twitterServiceMock.getMyTweets()).thenReturn(expectedMyTweets);
+
+        Response expected = Response.ok(expectedMyTweets).build();
+        Response actual = twitterResource.getMyTweets();
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testGetMyTweetsException() throws TwitterException {
+        String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+        when(twitterServiceMock.getMyTweets()).thenThrow(new TwitterException(expectedErrorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), expectedErrorMessage)).build();
+        Response actual = twitterResource.getMyTweets();
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
 
     private TwitterPost getTwitterPost(String text) {
         return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345");

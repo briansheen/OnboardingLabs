@@ -65,4 +65,15 @@ public class TwitterService {
             throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
         }
     }
+
+    public List<TwitterPost> getMyTweets() throws TwitterException {
+        try{
+            return twitter.getUserTimeline().stream()
+                    .map(status -> new TwitterPost(new TwitterUser(status.getUser().getScreenName(), status.getUser().getName(), status.getUser().getProfileImageURL()), status.getText(), status.getCreatedAt(), String.valueOf(status.getId())))
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("In getMyTweets: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
+            throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
+        }
+    }
 }

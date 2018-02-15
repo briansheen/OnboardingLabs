@@ -178,6 +178,43 @@ public class TwitterServiceTest {
         }
     }
 
+    @Test
+    public void testGetMyTweets() throws TwitterException {
+        ResponseList<Status> fixtureResponseList = new FixtureResponseList<>();
+        fixtureResponseList.add(getFixtureStatus("My first tweet"));
+        fixtureResponseList.add(getFixtureStatus("My second tweet"));
+
+        when(twitterMock.getUserTimeline()).thenReturn(fixtureResponseList);
+
+        List<TwitterPost> expected = new ArrayList<>();
+        expected.add(getExpectedTwitterPost("My first tweet"));
+        expected.add(getExpectedTwitterPost("My second tweet"));
+
+        assertEquals(expected, twitterService.getMyTweets());
+    }
+
+    @Test
+    public void testGetMyTweetsEmpty() throws TwitterException {
+        ResponseList<Status> fixtureResponseList = new FixtureResponseList<>();
+
+        when(twitterMock.getUserTimeline()).thenReturn(fixtureResponseList);
+
+        List<TwitterPost> expected = new ArrayList<>();
+
+        assertEquals(expected,twitterService.getMyTweets());
+    }
+
+    @Test
+    public void testGetMyTweetsException() throws TwitterException {
+        String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+        when(twitterMock.getUserTimeline()).thenThrow(new TwitterException("mocking something with Twitter went wrong"));
+        try{
+            twitterService.getMyTweets();
+        } catch (TwitterException e){
+            assertEquals(expectedErrorMessage, e.getMessage());
+        }
+    }
+
     private Status getFixtureStatus(String text) {
         FixtureStatus fixtureStatus = new FixtureStatus();
         fixtureStatus.setCreatedAt(new Date(1514908981));
