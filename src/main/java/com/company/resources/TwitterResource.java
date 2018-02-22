@@ -63,6 +63,17 @@ public class TwitterResource {
         }
     }
 
+    @GET
+    @Path("/mytweets")
+    public Response getMyTweets(){
+        try{
+            List<TwitterPost> myTweets = twitterService.getMyTweets();
+            return okResponse(myTweets);
+        } catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
+    }
+
     private Response okResponse(Object o){
         return Response.ok(o).build();
     }
