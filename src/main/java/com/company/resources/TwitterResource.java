@@ -7,12 +7,7 @@ import com.company.services.TwitterService;
 
 
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -29,9 +24,10 @@ public class TwitterResource {
 
     @POST
     @Path("/tweet")
-    public Response addTweet(@FormParam("message") String message) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addTweet(MessageJSON message) {
         try {
-            TwitterPost twitterPost = twitterService.postTweet(message);
+            TwitterPost twitterPost = twitterService.postTweet(message.getMessage());
             return okResponse(twitterPost);
         }
         catch (Exception e){
