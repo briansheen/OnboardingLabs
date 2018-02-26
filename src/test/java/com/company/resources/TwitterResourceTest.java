@@ -85,7 +85,7 @@ public class TwitterResourceTest {
         String val = RandomString.make(281);
         MessageJSON message = new MessageJSON();
         message.setMessage(val);
-        
+
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
         when(twitterServiceMock.postTweet(val)).thenThrow(new TwitterException(errorMessage));
 
