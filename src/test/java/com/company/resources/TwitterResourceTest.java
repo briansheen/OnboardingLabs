@@ -1,7 +1,5 @@
 package com.company.resources;
 
-import com.company.TwitterAppConfiguration;
-import com.company.TwitterAppConfigurationKeys;
 import com.company.api.TwitterErrorResponse;
 import com.company.models.TwitterPost;
 import com.company.models.TwitterUser;
@@ -34,11 +32,14 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweet() throws TwitterException {
         String val = "a good message";
+        MessageJSON message = new MessageJSON();
+        message.setMessage(val);
+
         TwitterPost twitterPost = getTwitterPost("good post message");
         when(twitterServiceMock.postTweet(val)).thenReturn(twitterPost);
 
         Response expected = Response.ok(twitterPost).build();
-        Response actual = twitterResource.addTweet(val);
+        Response actual = twitterResource.addTweet(message);
 
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
@@ -48,11 +49,14 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetBlank() throws TwitterException {
         String val = "";
+        MessageJSON message = new MessageJSON();
+        message.setMessage(val);
+
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
         when(twitterServiceMock.postTweet(val)).thenThrow(new TwitterException(errorMessage));
 
         Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
-        Response actual = twitterResource.addTweet(val);
+        Response actual = twitterResource.addTweet(message);
 
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
@@ -62,11 +66,14 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetNull() throws TwitterException {
         String val = null;
+        MessageJSON message = new MessageJSON();
+        message.setMessage(val);
+
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
         when(twitterServiceMock.postTweet(val)).thenThrow(new TwitterException(errorMessage));
 
         Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
-        Response actual = twitterResource.addTweet(val);
+        Response actual = twitterResource.addTweet(message);
 
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
@@ -76,11 +83,14 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetTooLong() throws TwitterException {
         String val = RandomString.make(281);
+        MessageJSON message = new MessageJSON();
+        message.setMessage(val);
+        
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
         when(twitterServiceMock.postTweet(val)).thenThrow(new TwitterException(errorMessage));
 
         Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
-        Response actual = twitterResource.addTweet(val);
+        Response actual = twitterResource.addTweet(message);
 
         assertEquals(expected.getStatus(), actual.getStatus());
         assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
