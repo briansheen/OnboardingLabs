@@ -27,7 +27,12 @@ public class TwitterService {
     }
 
     public TwitterPost postTweet(String message) throws TwitterException {
-        return postATweetOrReply(message, null, false);
+        if (StringUtils.isAllBlank(message) || message.length() > 280) {
+            logger.error("Post Request 'message' cannot be null, empty white spaces, or longer than 280 characters.");
+            throw new TwitterException("Tweet cannot be null, empty white spaces, or longer than 280 characters.");
+        }
+        StatusUpdate statusUpdate = new StatusUpdate(message);
+        return postATweet(statusUpdate);
     }
 
     public List<TwitterPost> getTimeline() throws TwitterException {
@@ -69,27 +74,25 @@ public class TwitterService {
     }
 
     public TwitterPost replyToTweet(String replyMessage, Long inReplyToStatusId) throws TwitterException {
-        return postATweetOrReply(replyMessage, inReplyToStatusId, true);
-    }
-
-    private TwitterPost postATweetOrReply(String message, Long inReplyToStatusId, boolean isReply) throws TwitterException {
-        if (StringUtils.isAllBlank(message) || message.length() > 280) {
+        if (StringUtils.isAllBlank(replyMessage) || replyMessage.length() > 280) {
             logger.error("Post Request 'message' cannot be null, empty white spaces, or longer than 280 characters.");
             throw new TwitterException("Tweet cannot be null, empty white spaces, or longer than 280 characters.");
         }
-        StatusUpdate statusUpdate = new StatusUpdate(message);
-        if (isReply) {
-            if (inReplyToStatusId == null) {
-                logger.error("Post Tweet Request inReplyToStatusId cannot be null.");
-                throw new TwitterException("Status Id of tweet being replied to cannot be null.");
-            }
-            statusUpdate.setInReplyToStatusId(inReplyToStatusId);
+        if (inReplyToStatusId == null) {
+            logger.error("in replyToTweet: inReplyToStatusId cannot be null.");
+            throw new TwitterException("Status Id of tweet being replied to cannot be null.");
         }
+        StatusUpdate statusUpdate = new StatusUpdate(replyMessage);
+        statusUpdate.setInReplyToStatusId(inReplyToStatusId);
+        return postATweet(statusUpdate);
+    }
+
+    private TwitterPost postATweet(StatusUpdate statusUpdate) throws TwitterException {
         try {
             Status status = twitter.updateStatus(statusUpdate);
             return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt(), String.valueOf(s.getId()), s.getInReplyToStatusId())).collect(Collectors.toList()).get(0);
         } catch (Exception e) {
-            logger.error("In postATweetOrReply: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
+            logger.error("In postATweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
         }
 
