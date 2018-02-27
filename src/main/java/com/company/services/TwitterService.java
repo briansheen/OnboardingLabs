@@ -27,17 +27,7 @@ public class TwitterService {
     }
 
     public TwitterPost postTweet(String message) throws TwitterException {
-        if (StringUtils.isAllBlank(message) || message.length() > 280) {
-            logger.error("Form Parameter 'message' cannot be null, empty white spaces, or longer than 280 characters.");
-            throw new TwitterException("Tweet cannot be null, empty white spaces, or longer than 280 characters.");
-        }
-        try {
-            Status status = twitter.updateStatus(message);
-            return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt(), String.valueOf(s.getId()), s.getInReplyToStatusId())).collect(Collectors.toList()).get(0);
-        } catch (Exception e) {
-            logger.error("In postTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
-            throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
-        }
+        return postATweetOrReply(message, null, false);
     }
 
     public List<TwitterPost> getTimeline() throws TwitterException {
@@ -79,22 +69,29 @@ public class TwitterService {
     }
 
     public TwitterPost replyToTweet(String replyMessage, Long inReplyToStatusId) throws TwitterException {
-        if (StringUtils.isAllBlank(replyMessage) || replyMessage.length() > 280) {
-            logger.error("Form Parameter 'replyMessage' cannot be null, empty white spaces, or longer than 280 characters.");
-            throw new TwitterException("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.");
+        return postATweetOrReply(replyMessage, inReplyToStatusId, true);
+    }
+
+    private TwitterPost postATweetOrReply(String message, Long inReplyToStatusId, boolean isReply) throws TwitterException {
+        if (StringUtils.isAllBlank(message) || message.length() > 280) {
+            logger.error("Post Request 'message' cannot be null, empty white spaces, or longer than 280 characters.");
+            throw new TwitterException("Tweet cannot be null, empty white spaces, or longer than 280 characters.");
         }
-        if (inReplyToStatusId == null) {
-            logger.error("In replyToTweet: inReplyToStatusId cannot be null.");
-            throw new TwitterException("Status Id of tweet being replied to cannot be null.");
+        StatusUpdate statusUpdate = new StatusUpdate(message);
+        if (isReply) {
+            if (inReplyToStatusId == null) {
+                logger.error("Post Tweet Request inReplyToStatusId cannot be null.");
+                throw new TwitterException("Status Id of tweet being replied to cannot be null.");
+            }
+            statusUpdate.setInReplyToStatusId(inReplyToStatusId);
         }
         try {
-            StatusUpdate statusUpdate = new StatusUpdate(replyMessage);
-            statusUpdate.setInReplyToStatusId(inReplyToStatusId);
             Status status = twitter.updateStatus(statusUpdate);
             return Stream.of(status).map(s -> new TwitterPost(new TwitterUser(s.getUser().getScreenName(), s.getUser().getName(), s.getUser().getProfileImageURL()), s.getText(), s.getCreatedAt(), String.valueOf(s.getId()), s.getInReplyToStatusId())).collect(Collectors.toList()).get(0);
         } catch (Exception e) {
-            logger.error("In replyToTweet: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
+            logger.error("In postATweetOrReply: There was an error interacting with the Twitter API and/or Twitter Keys.", e);
             throw new TwitterException("There was an error interacting with the Twitter API and/or Twitter Keys.");
         }
+
     }
 }

@@ -52,7 +52,7 @@ public class TwitterServiceTest {
 
     @Test
     public void testPostTweet() throws TwitterException {
-        when(twitterMock.updateStatus(anyString())).thenReturn(getFixtureStatus("I am a fixture status"));
+        when(twitterMock.updateStatus(any(StatusUpdate.class))).thenReturn(getFixtureStatus("I am a fixture status"));
         TwitterPost expected = getExpectedTwitterPost("I am a fixture status");
 
         assertEquals(expected, twitterService.postTweet("this is a good string!"));
@@ -230,7 +230,7 @@ public class TwitterServiceTest {
             twitterService.replyToTweet(replyMessage,222L);
             fail("Expected Twitter Exception to be thrown");
         } catch (TwitterException e) {
-            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+            assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
         }
     }
 
@@ -241,7 +241,7 @@ public class TwitterServiceTest {
             twitterService.replyToTweet(replyMessage,222L);
             fail("Expected Twitter Exception to be thrown");
         } catch (TwitterException e) {
-            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+            assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
         }
     }
 
@@ -252,7 +252,7 @@ public class TwitterServiceTest {
             twitterService.replyToTweet(replyMessage,222L);
             fail("Expected Twitter Exception to be thrown");
         } catch (TwitterException e) {
-            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+            assertEquals("Tweet cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
         }
     }
 

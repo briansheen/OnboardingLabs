@@ -1,13 +1,14 @@
 package com.company.resources;
 
 import com.company.api.TwitterErrorResponse;
+import com.company.models.PostTweetRequest;
+import com.company.models.PostReplyRequest;
 import com.company.models.TwitterPost;
 import com.company.models.TwitterUser;
 import com.company.services.TwitterService;
 import net.bytebuddy.utility.RandomString;
 import org.junit.Before;
 import org.junit.Test;
-import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 
 import javax.ws.rs.core.Response;
@@ -36,7 +37,7 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweet() throws TwitterException {
         String val = "a good message";
-        MessageJSON message = new MessageJSON();
+        PostTweetRequest message = new PostTweetRequest();
         message.setMessage(val);
 
         TwitterPost twitterPost = getTwitterPost("good post message");
@@ -53,7 +54,7 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetBlank() throws TwitterException {
         String val = "";
-        MessageJSON message = new MessageJSON();
+        PostTweetRequest message = new PostTweetRequest();
         message.setMessage(val);
 
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
@@ -70,7 +71,7 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetNull() throws TwitterException {
         String val = null;
-        MessageJSON message = new MessageJSON();
+        PostTweetRequest message = new PostTweetRequest();
         message.setMessage(val);
 
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
@@ -87,7 +88,7 @@ public class TwitterResourceTest {
     @Test
     public void testAddTweetTooLong() throws TwitterException {
         String val = RandomString.make(281);
-        MessageJSON message = new MessageJSON();
+        PostTweetRequest message = new PostTweetRequest();
         message.setMessage(val);
 
         String errorMessage = "Tweet cannot be null, empty white spaces, or longer than 280 characters.";
@@ -209,7 +210,7 @@ public class TwitterResourceTest {
         String replyMessage = "a good message";
         Long inReplyToStatusId = 222L;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
@@ -230,7 +231,7 @@ public class TwitterResourceTest {
         String replyMessage = RandomString.make(281);
         Long inReplyToStatusId = 222L;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
@@ -250,7 +251,7 @@ public class TwitterResourceTest {
         String replyMessage = " ";
         Long inReplyToStatusId = 222L;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
@@ -270,7 +271,7 @@ public class TwitterResourceTest {
         String replyMessage = null;
         Long inReplyToStatusId = 222L;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
@@ -290,7 +291,7 @@ public class TwitterResourceTest {
         String replyMessage = "a good reply message";
         Long inReplyToStatusId = null;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
@@ -312,7 +313,7 @@ public class TwitterResourceTest {
         String replyMessage = "a good message";
         Long inReplyToStatusId = 222L;
 
-        ReplyJSON reply = new ReplyJSON();
+        PostReplyRequest reply = new PostReplyRequest();
         reply.setReplyMessage(replyMessage);
         reply.setInReplyToStatusId(inReplyToStatusId);
 
