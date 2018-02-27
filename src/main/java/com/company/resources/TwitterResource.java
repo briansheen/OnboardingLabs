@@ -2,6 +2,8 @@ package com.company.resources;
 
 
 import com.company.api.TwitterErrorResponse;
+import com.company.models.PostTweetRequest;
+import com.company.models.PostReplyRequest;
 import com.company.models.TwitterPost;
 import com.company.services.TwitterService;
 
@@ -25,12 +27,24 @@ public class TwitterResource {
     @POST
     @Path("/tweet")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addTweet(MessageJSON message) {
+    public Response addTweet(PostTweetRequest message) {
         try {
             TwitterPost twitterPost = twitterService.postTweet(message.getMessage());
             return okResponse(twitterPost);
         }
         catch (Exception e){
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
+    }
+
+    @POST
+    @Path("/reply")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response replyToTweet(PostReplyRequest reply) {
+        try {
+            TwitterPost twitterPost = twitterService.replyToTweet(reply.getReplyMessage(), reply.getInReplyToStatusId());
+            return okResponse(twitterPost);
+        } catch (Exception e) {
             return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
         }
     }

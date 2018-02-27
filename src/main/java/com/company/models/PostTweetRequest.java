@@ -1,8 +1,8 @@
-package com.company.resources;
+package com.company.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MessageJSON {
+public class PostTweetRequest {
 
     @JsonProperty("message")
     private String message;
