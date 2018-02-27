@@ -7,6 +7,7 @@ import com.company.services.TwitterService;
 import net.bytebuddy.utility.RandomString;
 import org.junit.Before;
 import org.junit.Test;
+import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 
 import javax.ws.rs.core.Response;
@@ -16,6 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -200,9 +204,130 @@ public class TwitterResourceTest {
         assertEquals(expected.getEntity(), actual.getEntity());
     }
 
+    @Test
+    public void testReplyToTweet() throws TwitterException {
+        String replyMessage = "a good message";
+        Long inReplyToStatusId = 222L;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        TwitterPost twitterPost = getTwitterPost("a good reply message");
+
+        when(twitterServiceMock.replyToTweet(replyMessage, inReplyToStatusId)).thenReturn(twitterPost);
+
+        Response expected = Response.ok(twitterPost).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testReplyToTweetMessageTooLong() throws TwitterException {
+        String replyMessage = RandomString.make(281);
+        Long inReplyToStatusId = 222L;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        String errorMessage = "Tweet reply cannot be null, empty white spaces, or longer than 280 characters.";
+        when(twitterServiceMock.replyToTweet(replyMessage, inReplyToStatusId)).thenThrow(new TwitterException(errorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testReplyToTweetMessageBlank() throws TwitterException {
+        String replyMessage = " ";
+        Long inReplyToStatusId = 222L;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        String errorMessage = "Tweet reply cannot be null, empty white spaces, or longer than 280 characters.";
+        when(twitterServiceMock.replyToTweet(replyMessage, inReplyToStatusId)).thenThrow(new TwitterException(errorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testReplyToTweetMessageNull() throws TwitterException {
+        String replyMessage = null;
+        Long inReplyToStatusId = 222L;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        String errorMessage = "Tweet reply cannot be null, empty white spaces, or longer than 280 characters.";
+        when(twitterServiceMock.replyToTweet(replyMessage, inReplyToStatusId)).thenThrow(new TwitterException(errorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testReplyToTweetInReplyToStatusIdNull() throws TwitterException {
+        String replyMessage = "a good reply message";
+        Long inReplyToStatusId = null;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        String errorMessage = "Status Id of tweet being replied to cannot be null.";
+        when(twitterServiceMock.replyToTweet(replyMessage, inReplyToStatusId)).thenThrow(new TwitterException(errorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), errorMessage)).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
+
+    @Test
+    public void testReplyToTweetException() throws TwitterException {
+        String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+
+        String replyMessage = "a good message";
+        Long inReplyToStatusId = 222L;
+
+        ReplyJSON reply = new ReplyJSON();
+        reply.setReplyMessage(replyMessage);
+        reply.setInReplyToStatusId(inReplyToStatusId);
+
+        when(twitterServiceMock.replyToTweet(anyString(), anyLong())).thenThrow(new TwitterException(expectedErrorMessage));
+
+        Response expected = Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), expectedErrorMessage)).build();
+        Response actual = twitterResource.replyToTweet(reply);
+
+        assertEquals(expected.getStatus(), actual.getStatus());
+        assertEquals(expected.getStatusInfo(), actual.getStatusInfo());
+        assertEquals(expected.getEntity(), actual.getEntity());
+    }
 
     private TwitterPost getTwitterPost(String text) {
-        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345");
+        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345", 222L);
     }
 
 }

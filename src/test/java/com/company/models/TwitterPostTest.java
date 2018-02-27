@@ -22,18 +22,21 @@ public class TwitterPostTest {
         assertNull(twitterPost.getMessage());
         assertNull(twitterPost.getCreatedAt());
         assertNull(twitterPost.getId());
+        assertNull(twitterPost.getInReplyToStatusId());
 
         TwitterUser twitterUser = new TwitterUser("ClifBar", "CLIF Bar", "https://pbs.twimg.com/profile_images/880842933590568960/Lv_OB29W_400x400.jpg");
         String message = "Crunchy Peanut Butter";
         Date createdAt = new Date(1515019973);
         String id = "12345";
+        Long inReplyToStatusId = 222L;
 
-        twitterPost = new TwitterPost(twitterUser, message, createdAt, id);
+        twitterPost = new TwitterPost(twitterUser, message, createdAt, id, inReplyToStatusId);
 
         assertEquals(twitterUser, twitterPost.getTwitterUser());
         assertEquals(message, twitterPost.getMessage());
         assertEquals(createdAt, twitterPost.getCreatedAt());
-        assertEquals(id , twitterPost.getId());
+        assertEquals(id, twitterPost.getId());
+        assertEquals(inReplyToStatusId, twitterPost.getInReplyToStatusId());
     }
 
     @Test
@@ -42,14 +45,15 @@ public class TwitterPostTest {
         String message = "Crunchy Peanut Butter";
         Date createdAt = new Date(1515019973);
         String id = "12345";
+        Long inReplyToStatusId = 222L;
 
-        twitterPost = new TwitterPost(twitterUser, message, createdAt, id);
+        twitterPost = new TwitterPost(twitterUser, message, createdAt, id, inReplyToStatusId);
 
         assertTrue(twitterPost.equals(twitterPost));
 
-        TwitterPost twitterPostCopy = new TwitterPost(twitterUser, message, createdAt, id);
+        TwitterPost twitterPostCopy = new TwitterPost(twitterUser, message, createdAt, id, inReplyToStatusId);
 
-        assertEquals(twitterPost.hashCode(),twitterPostCopy.hashCode());
+        assertEquals(twitterPost.hashCode(), twitterPostCopy.hashCode());
         assertEquals(twitterPost.toString(), twitterPostCopy.toString());
 
         twitterPostCopy.setTwitterUser(new TwitterUser());
@@ -71,6 +75,11 @@ public class TwitterPostTest {
 
         assertFalse(twitterPost.equals(twitterPostCopy));
 
+        twitterPostCopy.setId(id);
+        twitterPostCopy.setInReplyToStatusId(223L);
+
+        assertFalse(twitterPost.equals(twitterPostCopy));
+
         assertFalse(twitterPost.equals(null));
         assertFalse(twitterPost.equals(twitterUser));
     }
@@ -81,15 +90,18 @@ public class TwitterPostTest {
         String message = "Crunchy Peanut Butter";
         Date createdAt = new Date(1515019973);
         String id = "12345";
+        Long inReplyToStatusId = 222L;
 
         twitterPost.setTwitterUser(twitterUser);
         twitterPost.setMessage(message);
         twitterPost.setCreatedAt(createdAt);
         twitterPost.setId(id);
+        twitterPost.setInReplyToStatusId(inReplyToStatusId);
 
         assertEquals(twitterUser, twitterPost.getTwitterUser());
         assertEquals(message, twitterPost.getMessage());
         assertEquals(createdAt, twitterPost.getCreatedAt());
         assertEquals(id, twitterPost.getId());
+        assertEquals(inReplyToStatusId, twitterPost.getInReplyToStatusId());
     }
 }

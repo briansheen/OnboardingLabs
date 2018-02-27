@@ -35,6 +35,18 @@ public class TwitterResource {
         }
     }
 
+    @POST
+    @Path("/reply")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response replyToTweet(ReplyJSON reply) {
+        try {
+            TwitterPost twitterPost = twitterService.replyToTweet(reply.getReplyMessage(), reply.getInReplyToStatusId());
+            return okResponse(twitterPost);
+        } catch (Exception e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(new TwitterErrorResponse(Response.Status.NOT_FOUND.getStatusCode(), e.getMessage())).build();
+        }
+    }
+
     @GET
     @Path("/timeline")
     public Response getTimeline() {

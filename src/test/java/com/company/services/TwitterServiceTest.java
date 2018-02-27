@@ -1,7 +1,6 @@
 package com.company.services;
 
 import com.company.models.*;
-import com.company.TwitterAppConfigurationKeys;
 import net.bytebuddy.utility.RandomString;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -201,25 +200,93 @@ public class TwitterServiceTest {
 
         List<TwitterPost> expected = new ArrayList<>();
 
-        assertEquals(expected,twitterService.getMyTweets());
+        assertEquals(expected, twitterService.getMyTweets());
     }
 
     @Test
     public void testGetMyTweetsException() throws TwitterException {
         String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
         when(twitterMock.getUserTimeline()).thenThrow(new TwitterException("mocking something with Twitter went wrong"));
-        try{
+        try {
             twitterService.getMyTweets();
-        } catch (TwitterException e){
+        } catch (TwitterException e) {
             assertEquals(expectedErrorMessage, e.getMessage());
         }
     }
+
+    @Test
+    public void testReplyToTweet() throws TwitterException {
+        when(twitterMock.updateStatus(any(StatusUpdate.class))).thenReturn(getFixtureStatus("I am a fixture status"));
+
+        TwitterPost expected = getExpectedTwitterPost("I am a fixture status");
+
+        assertEquals(expected, twitterService.replyToTweet("this is a good reply message", 222L));
+    }
+
+    @Test
+    public void testReplyToTweetMessageTooLong() {
+        String replyMessage = RandomString.make(281);
+        try {
+            twitterService.replyToTweet(replyMessage,222L);
+            fail("Expected Twitter Exception to be thrown");
+        } catch (TwitterException e) {
+            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testReplyToTweetMessageBlank() {
+        String replyMessage = "   ";
+        try {
+            twitterService.replyToTweet(replyMessage,222L);
+            fail("Expected Twitter Exception to be thrown");
+        } catch (TwitterException e) {
+            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testReplyToTweetMessageNull() {
+        String replyMessage = null;
+        try {
+            twitterService.replyToTweet(replyMessage,222L);
+            fail("Expected Twitter Exception to be thrown");
+        } catch (TwitterException e) {
+            assertEquals("Tweet reply cannot be null, empty white spaces, or longer than 280 characters.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testReplyToTweetReplyToStatusIdNull() {
+        Long replyToStatusId = null;
+        try {
+            twitterService.replyToTweet("a good reply message", replyToStatusId);
+            fail("Expected Twitter Exception to be thrown");
+        } catch (TwitterException e) {
+            assertEquals("Status Id of tweet being replied to cannot be null.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testReplyToTweetException() throws TwitterException {
+        String expectedErrorMessage = "There was an error interacting with the Twitter API and/or Twitter Keys.";
+
+        when(twitterMock.updateStatus(any(StatusUpdate.class))).thenThrow(new TwitterException("mocking that something went wrong with Twitter"));
+
+        try {
+            twitterService.replyToTweet("Exception should be thrown here", 222L);
+        } catch (TwitterException e) {
+            assertEquals(expectedErrorMessage, e.getMessage());
+        }
+    }
+
 
     private Status getFixtureStatus(String text) {
         FixtureStatus fixtureStatus = new FixtureStatus();
         fixtureStatus.setCreatedAt(new Date(1514908981));
         fixtureStatus.setText(text);
         fixtureStatus.setId("12345");
+        fixtureStatus.setInReplyToStatusId(222L);
         fixtureStatus.setUser(getFixtureUser());
         return fixtureStatus;
     }
@@ -233,6 +300,6 @@ public class TwitterServiceTest {
     }
 
     private TwitterPost getExpectedTwitterPost(String text) {
-        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345");
+        return new TwitterPost(new TwitterUser("Lab_9", "Lab Nine", "https://confluence.dev.lithium.com/x/8C5EBQ"), text, new Date(1514908981), "12345", 222L);
     }
 }

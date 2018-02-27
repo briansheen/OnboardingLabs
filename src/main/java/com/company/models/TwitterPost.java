@@ -9,15 +9,17 @@ public class TwitterPost {
     private String message;
     private Date createdAt;
     private String id;
+    private Long inReplyToStatusId;
 
     public TwitterPost() {
     }
 
-    public TwitterPost(TwitterUser twitterUser, String message, Date createdAt, String id) {
+    public TwitterPost(TwitterUser twitterUser, String message, Date createdAt, String id, Long inReplyToStatusId) {
         this.twitterUser = twitterUser;
         this.message = message;
         this.createdAt = createdAt;
         this.id = id;
+        this.inReplyToStatusId = inReplyToStatusId;
     }
 
     public TwitterUser getTwitterUser() {
@@ -52,6 +54,14 @@ public class TwitterPost {
         this.id = id;
     }
 
+    public Long getInReplyToStatusId() {
+        return inReplyToStatusId;
+    }
+
+    public void setInReplyToStatusId(Long inReplyToStatusId) {
+        this.inReplyToStatusId = inReplyToStatusId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,13 +70,14 @@ public class TwitterPost {
         return Objects.equals(twitterUser, that.twitterUser) &&
                 Objects.equals(message, that.message) &&
                 Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(id, that.id);
+                Objects.equals(id, that.id) &&
+                Objects.equals(inReplyToStatusId, that.inReplyToStatusId);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(twitterUser, message, createdAt, id);
+        return Objects.hash(twitterUser, message, createdAt, id, inReplyToStatusId);
     }
 
     @Override
@@ -76,6 +87,7 @@ public class TwitterPost {
                 ", message='" + message + '\'' +
                 ", createdAt=" + createdAt +
                 ", id='" + id + '\'' +
+                ", inReplyToStatusId=" + inReplyToStatusId +
                 '}';
     }
 }

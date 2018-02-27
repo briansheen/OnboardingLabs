@@ -9,6 +9,7 @@ public class FixtureStatus implements Status {
     private User user;
     private String text;
     private String id;
+    private Long inReplyToStatusId;
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
@@ -24,6 +25,10 @@ public class FixtureStatus implements Status {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setInReplyToStatusId(Long inReplyToStatusId) {
+        this.inReplyToStatusId = inReplyToStatusId;
     }
 
     @Override
@@ -53,7 +58,7 @@ public class FixtureStatus implements Status {
 
     @Override
     public long getInReplyToStatusId() {
-        return 0;
+        return inReplyToStatusId;
     }
 
     @Override
